@@ -1,0 +1,41 @@
+.button {
+    background-color: var(--pui-color-primary);
+    color: var(--pui-color-text);
+    border-radius: var(--pui-radius-md);
+
+    border: none;
+    cursor: pointer;
+    font-weight: 400;
+    transition: opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:hover {
+    opacity: 0.85;
+}
+
+.button:active {
+    opacity: 0.95;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.size-sm {
+    font-size: var(--pui-font-sm);
+    padding: var(--pui-space-1) var(--pui-space-3);
+}
+
+.size-md {
+    font-size: var(--pui-font-md);
+    padding: var(--pui-space-2) var(--pui-space-4);
+}
+
+.size-lg {
+    font-size: var(--pui-font-lg);
+    padding: var(--pui-space-3) var(--pui-space-6);
+}

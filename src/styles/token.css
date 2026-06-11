@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --pui-color-primary: #a7e7fd;
+    --pui-color-text: #151d24;
+
+    --pui-radius-sm: 4px;
+    --pui-radius-md: 5px;
+    --pui-radius-lg: 10px;
+
+    --pui-space-1: 4px;
+    --pui-space-2: 8px;
+    --pui-space-3: 12px;
+    --pui-space-4: 16px;
+    --pui-space-5: 24px;
+    --pui-space-6: 32px;
+
+    --pui-font-family: "Inter", sans-serif;
+    --pui-font-sm: 0.875rem;
+    --pui-font-md: 1rem;
+    --pui-font-lg: 1.125rem;
+}
+
+[data-pui-theme="dark"] {
+    --pui-color-primary: #151d24;
+    --pui-color-text: #ededed;
+}

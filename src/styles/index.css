@@ -1,0 +1,6 @@
+@import './token.css';
+
+* {
+    box-sizing: border-box;
+    font-family: var(--pui-font-family);
+}
