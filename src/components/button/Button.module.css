@@ -1,41 +1,171 @@
+/* ---- Base -------------------------------------------------------------------- */
 .button {
-    background-color: var(--pui-color-primary);
-    color: var(--pui-color-text);
-    border-radius: var(--pui-radius-md);
-
+    position: relative;
+    overflow: hidden;
     border: none;
     cursor: pointer;
-    font-weight: 400;
-    transition: opacity 0.2s ease;
+
+    font-family: var(--pui-font-family);
+    font-weight: var(--pui-font-weight-button);
+    letter-spacing: 0.015em;
+    line-height: 1;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: var(--pui-space-2);
+    white-space: nowrap;
+    user-select: none;
+
+    border-radius: var(--pui-radius-md);
+    outline: none;
+
+    transition:
+        transform var(--pui-t-fast) var(--pui-ease),
+        box-shadow var(--pui-t-base) var(--pui-ease),
+        background var(--pui-t-fast) var(--pui-ease),
+        background-color var(--pui-t-fast) var(--pui-ease),
+        border-color var(--pui-t-base) var(--pui-ease),
+        color var(--pui-t-base) var(--pui-ease),
+        opacity var(--pui-t-fast) var(--pui-ease),
+        text-decoration-color var(--pui-t-base) var(--pui-ease);
 }
 
-.button:hover {
-    opacity: 0.85;
+.button:hover:not(:disabled) {
+    transform: translateY(-1.5px);
 }
 
-.button:active {
-    opacity: 0.95;
+.button:active:not(:disabled) {
+    transform: translateY(1.5px);
+    transition-duration: 60ms;
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--pui-color-primary);
+    outline-offset: 3px;
 }
 
 .button:disabled {
-    opacity: 0.5;
+    opacity: 0.38;
     cursor: not-allowed;
+    transform: none !important;
 }
 
+/* ---- Variants ------------------------------------------------------------------ */
+.variant-primary {
+    background: linear-gradient(160deg,
+            color-mix(in srgb, var(--pui-color-primary) 87%, #fff) 0%,
+            var(--pui-color-primary) 52%,
+            color-mix(in srgb, var(--pui-color-primary) 83%, #000) 100%);
+    color: var(--pui-color-primary-fg);
+    box-shadow:
+        var(--pui-shadow-sm),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+.variant-primary:hover:not(:disabled) {
+    box-shadow:
+        0 6px 22px var(--pui-color-primary-shadow),
+        0 2px 8px rgba(0, 0, 0, 0.10),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.variant-primary:active:not(:disabled) {
+    box-shadow:
+        0 1px 4px var(--pui-color-primary-shadow),
+        inset 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.variant-secondary {
+    background: linear-gradient(160deg,
+            color-mix(in srgb, var(--pui-color-secondary) 87%, #fff) 0%,
+            var(--pui-color-secondary) 52%,
+            color-mix(in srgb, var(--pui-color-secondary) 83%, #000) 100%);
+    color: var(--pui-color-secondary-fg);
+    box-shadow:
+        var(--pui-shadow-sm),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+.variant-secondary:hover:not(:disabled) {
+    box-shadow:
+        0 6px 22px var(--pui-color-secondary-shadow),
+        0 2px 8px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.variant-secondary:active:not(:disabled) {
+    box-shadow:
+        0 1px 4px var(--pui-color-secondary-shadow),
+        inset 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.variant-outline {
+    background: transparent;
+    border: 1.5px solid var(--pui-color-border-strong);
+    color: var(--pui-color-text);
+    box-shadow: var(--pui-shadow-xs);
+}
+
+.variant-outline:hover:not(:disabled) {
+    border-color: var(--pui-color-primary);
+    color: var(--pui-color-primary);
+    background-color: color-mix(in srgb, var(--pui-color-primary) 7%, transparent);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06), 0 0 0 0.5px var(--pui-color-primary);
+}
+
+.variant-outline:active:not(:disabled) {
+    background-color: color-mix(in srgb, var(--pui-color-primary) 12%, transparent);
+    box-shadow: var(--pui-shadow-xs);
+}
+
+.variant-ghost {
+    background: transparent;
+    color: var(--pui-color-text);
+}
+
+.variant-ghost:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--pui-color-text) 8%, transparent);
+}
+
+.variant-ghost:active:not(:disabled) {
+    background: color-mix(in srgb, var(--pui-color-text) 14%, transparent);
+}
+
+.variant-link {
+    background: transparent;
+    color: var(--pui-color-primary);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--pui-color-primary) 35%, transparent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+}
+
+.variant-link:hover:not(:disabled) {
+    text-decoration-color: var(--pui-color-primary);
+    transform: none;
+}
+
+.variant-link:active:not(:disabled) {
+    color: color-mix(in srgb, var(--pui-color-primary) 70%, #000);
+    transform: none;
+}
+
+/* ---- Sizes ------------------------------------------------------------------------ */
 .size-sm {
     font-size: var(--pui-font-sm);
-    padding: var(--pui-space-1) var(--pui-space-3);
+    padding: 5px var(--pui-space-3);
+    border-radius: var(--pui-radius-sm);
 }
 
 .size-md {
     font-size: var(--pui-font-md);
-    padding: var(--pui-space-2) var(--pui-space-4);
+    padding: 10px 20px;
 }
 
 .size-lg {
     font-size: var(--pui-font-lg);
-    padding: var(--pui-space-3) var(--pui-space-6);
+    padding: 13px var(--pui-space-6);
+    border-radius: var(--pui-radius-lg);
+    letter-spacing: 0.02em;
 }

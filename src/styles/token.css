@@ -1,13 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 :root {
-    --pui-color-primary: #a7e7fd;
-    --pui-color-text: #151d24;
+    /* Accent colors */
+    --pui-color-primary: #2563eb;
+    --pui-color-primary-fg: #ffffff;
+    --pui-color-primary-shadow: rgba(37, 99, 235, 0.25);
 
-    --pui-radius-sm: 4px;
-    --pui-radius-md: 5px;
-    --pui-radius-lg: 10px;
+    /* Secondary actions */
+    --pui-color-secondary: #64748b;
+    --pui-color-secondary-fg: #ffffff;
+    --pui-color-secondary-shadow: rgba(100, 116, 139, 0.2);
 
+    /* Neutral surface */
+    --pui-color-bg: #f8fafc;
+    --pui-color-surface: #ffffff;
+
+    /* Interactive Surface States */
+    --pui-color-surface-hover: #f1f5f9;
+    --pui-color-surface-selected: #eff6ff;
+
+    --pui-color-border: #e2e8f0;
+    --pui-color-border-strong: #cbd5e1;
+
+    /* Text */
+    --pui-color-text: #0f172a;
+    --pui-color-text-muted: #64748b;
+
+    /* Shadows */
+    --pui-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --pui-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+    /* Radius */
+    --pui-radius-sm: 6px;
+    --pui-radius-md: 8px;
+    --pui-radius-lg: 12px;
+    --pui-radius-pill: 9999px;
+
+    /* Spacing */
     --pui-space-1: 4px;
     --pui-space-2: 8px;
     --pui-space-3: 12px;
@@ -15,13 +44,43 @@
     --pui-space-5: 24px;
     --pui-space-6: 32px;
 
-    --pui-font-family: "Inter", sans-serif;
-    --pui-font-sm: 0.875rem;
-    --pui-font-md: 1rem;
-    --pui-font-lg: 1.125rem;
+    /* Typography */
+    --pui-font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --pui-font-sm: 0.8125rem;
+    /* 13px */
+    --pui-font-md: 0.9375rem;
+    /* 15px */
+    --pui-font-lg: 1.0625rem;
+    /* 17px */
+    --pui-font-weight-button: 500;
+
+    /* Easing */
+    --pui-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --pui-t-fast: 100ms;
+    --pui-t-base: 180ms;
 }
 
 [data-pui-theme="dark"] {
-    --pui-color-primary: #151d24;
-    --pui-color-text: #ededed;
+    --pui-color-primary: #3b82f6;
+    --pui-color-primary-fg: #ffffff;
+    --pui-color-primary-shadow: rgba(59, 130, 246, 0.35);
+
+    --pui-color-secondary: #94a3b8;
+    --pui-color-secondary-fg: #0f172a;
+    --pui-color-secondary-shadow: rgba(148, 163, 184, 0.25);
+
+    --pui-color-bg: #0f172a;
+    --pui-color-surface: #1e293b;
+
+    --pui-color-surface-hover: #334155;
+    --pui-color-surface-selected: rgba(59, 130, 246, 0.15);
+
+    --pui-color-border: #334155;
+    --pui-color-border-strong: #475569;
+
+    --pui-color-text: #f8fafc;
+    --pui-color-text-muted: #94a3b8;
+
+    --pui-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --pui-shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.50), 0 1px 2px rgba(0, 0, 0, 0.25);
 }
