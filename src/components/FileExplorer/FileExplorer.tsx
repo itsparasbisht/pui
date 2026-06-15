@@ -1,22 +1,32 @@
-import { FolderPlus, FilePlus, Folder, File } from "lucide-react";
+import { FolderPlus, FilePlus } from "lucide-react";
 import styles from "./FileExplorer.module.css";
-import { useState } from "react";
-import { generateId, type ExplorerData } from "./utils";
+import { useMemo, useState } from "react";
+import {
+  buildTree,
+  generateId,
+  type ExplorerData,
+  type ItemType,
+} from "./utils";
 import { AddItemInput } from "./AddItemInput";
+import { ItemNode } from "./ItemNode";
 
 const getNextId = generateId();
 
-let itemType: "folder" | "file" = "folder";
+let itemType: ItemType = "folder";
 
 export function FileExplorer() {
-  const [explorerData, setExplorerData] = useState<ExplorerData[]>([]);
+  const [explorerData, setExplorerData] = useState<ExplorerData[]>([
+    { id: 0, name: "folder1", type: "folder", parentId: null },
+    { id: 1, name: "file1", type: "file", parentId: 0 },
+    { id: 2, name: "file2", type: "file", parentId: null },
+    { id: 3, name: "file3", type: "file", parentId: 0 },
+    { id: 4, name: "folder2", type: "folder", parentId: 0 },
+    { id: 5, name: "file4", type: "file", parentId: 0 },
+    { id: 6, name: "file5", type: "file", parentId: 4 },
+  ]);
 
-  function handleCreateFolder() {
-    itemType = "folder";
-  }
-
-  function handleCreateFile() {
-    itemType = "file";
+  function handleCreate(item: ItemType) {
+    itemType = item;
   }
 
   function handleEnterItem(name: string) {
@@ -28,32 +38,29 @@ export function FileExplorer() {
         id: newId,
         name,
         type: itemType,
-        parentId: null,
+        parentId: null, // temp,
       },
     ]);
   }
 
+  const itemsTree = useMemo(() => buildTree(explorerData), [explorerData]);
+
   return (
     <div className={styles.container}>
       <div>
-        <button onClick={handleCreateFolder}>
+        <button onClick={() => handleCreate("folder")}>
           <FolderPlus />
         </button>
-        <button onClick={handleCreateFile}>
+        <button onClick={() => handleCreate("file")}>
           <FilePlus />
         </button>
       </div>
 
       <AddItemInput onEnterItem={handleEnterItem} />
 
-      {explorerData.map((item) => (
-        <div key={item.id}>
-          {item.type === "folder" ? <Folder /> : <File />}
-          <span>{item.name}</span>
-        </div>
+      {itemsTree.map((rootNode) => (
+        <ItemNode node={rootNode} />
       ))}
-
-      {/* <p>{JSON.stringify(explorerData, null, 2)}</p> */}
     </div>
   );
 }
