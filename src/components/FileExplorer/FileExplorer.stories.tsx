@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FileExplorer } from "./FileExplorer";
 import "../../styles/index.css";
+import { FileEx } from "./FileEx";
 
 const meta = {
-  component: FileExplorer,
-} satisfies Meta<typeof FileExplorer>;
+  component: FileEx,
+} satisfies Meta<typeof FileEx>;
 
 export default meta;
 

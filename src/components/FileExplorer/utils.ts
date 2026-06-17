@@ -8,7 +8,7 @@ export type ExplorerData = {
 };
 
 export function generateId() {
-  let id = 0;
+  let id = 7;
 
   return function () {
     return id++;
