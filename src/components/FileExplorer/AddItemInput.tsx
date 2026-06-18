@@ -29,6 +29,7 @@ export function AddItemInput({ onAddItem, currentNode }: AddItemInputProps) {
         onClick={(e) => {
           e.stopPropagation();
         }}
+        autoFocus
       />
     </div>
   );

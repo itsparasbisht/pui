@@ -16,22 +16,15 @@ const getNextId = generateId();
 let itemType: ItemType = "folder";
 
 export function FileExplorer() {
-  const [explorerData, setExplorerData] = useState<ExplorerData[]>([
-    { id: 0, name: "folder1", type: "folder", parentId: null },
-    { id: 1, name: "file1", type: "file", parentId: 0 },
-    { id: 2, name: "file2", type: "file", parentId: null },
-    { id: 3, name: "file3", type: "file", parentId: 0 },
-    { id: 4, name: "folder2", type: "folder", parentId: 0 },
-    { id: 5, name: "file4", type: "file", parentId: 0 },
-    { id: 6, name: "file5", type: "file", parentId: 4 },
-  ]);
+  const [explorerData, setExplorerData] = useState<ExplorerData[]>([]);
+
+  const [showAddItemInput, setShowAddItemInput] = useState(false);
 
   const { activeNode, changeActiveNode } = useContext(FileExplorerContext);
 
-  console.log("active", activeNode);
-
   function handleCreate(item: ItemType) {
     itemType = item;
+    setShowAddItemInput(true);
   }
 
   function handleEnterItem(name: string) {
@@ -54,6 +47,8 @@ export function FileExplorer() {
         parentId: newItemParentId,
       },
     ]);
+
+    setShowAddItemInput(false);
   }
 
   const itemsTree = useMemo(() => buildTree(explorerData), [explorerData]);
@@ -64,6 +59,7 @@ export function FileExplorer() {
       onClick={() => {
         console.log("click");
         changeActiveNode!(null);
+        setShowAddItemInput(false);
       }}
     >
       <div>
@@ -85,13 +81,19 @@ export function FileExplorer() {
         </button>
       </div>
 
-      <AddItemInput onAddItem={handleEnterItem} currentNode={null} />
+      {showAddItemInput &&
+        (activeNode === null ||
+          (activeNode.type === "file" && activeNode.parentId === null)) && (
+          <AddItemInput onAddItem={handleEnterItem} currentNode={null} />
+        )}
 
       {itemsTree.map((rootNode) => (
         <ItemNode
           key={rootNode.id}
           node={rootNode}
           addItemHandler={handleEnterItem}
+          isVisible={showAddItemInput}
+          setIsVisible={setShowAddItemInput}
         />
       ))}
     </div>

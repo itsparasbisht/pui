@@ -8,7 +8,7 @@ export type ExplorerData = {
 };
 
 export function generateId() {
-  let id = 7;
+  let id = 0;
 
   return function () {
     return id++;
@@ -24,9 +24,21 @@ export function buildTree(items: ExplorerData[]) {
 
   const tree: TreeNode[] = [];
 
-  items.forEach((item) => (mappedItems[item.id] = { ...item, children: [] }));
+  const sortedItems = items.sort((a, b) => {
+    if (a.type === "folder" && b.type === "file") {
+      return -1;
+    } else if (a.type === "file" && b.type === "folder") {
+      return 1;
+    } else {
+      return a.name > b.name ? 1 : -1;
+    }
+  });
 
-  items.forEach((item) => {
+  sortedItems.forEach(
+    (item) => (mappedItems[item.id] = { ...item, children: [] }),
+  );
+
+  sortedItems.forEach((item) => {
     if (item.parentId === null) {
       tree.push(mappedItems[item.id]);
     } else {

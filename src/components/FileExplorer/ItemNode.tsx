@@ -7,9 +7,16 @@ import { FileExplorerContext } from "./context/FileExplorerContext";
 type ItemNodeProps = {
   node: TreeNode;
   addItemHandler: (name: string) => void;
+  isVisible: boolean;
+  setIsVisible: (hide: boolean) => void;
 };
 
-export function ItemNode({ node, addItemHandler }: ItemNodeProps) {
+export function ItemNode({
+  node,
+  addItemHandler,
+  isVisible,
+  setIsVisible,
+}: ItemNodeProps) {
   const isFolder = node.type === "folder";
 
   const { activeNode, changeActiveNode } = useContext(FileExplorerContext);
@@ -29,15 +36,20 @@ export function ItemNode({ node, addItemHandler }: ItemNodeProps) {
         onClick={(e) => {
           e.stopPropagation();
           changeActiveNode!(node);
+          setIsVisible(false);
         }}
       >
         {isFolder ? <Folder /> : <File />}
         <span>{node.name}</span>
       </div>
 
-      {node.type === "folder" && (
-        <AddItemInput onAddItem={addItemHandler} currentNode={node} />
-      )}
+      {node.type === "folder" &&
+        isVisible &&
+        (activeNode?.id === node.id ||
+          (activeNode?.type === "file" &&
+            activeNode?.parentId === node.id)) && (
+          <AddItemInput onAddItem={addItemHandler} currentNode={node} />
+        )}
 
       {isFolder &&
         node.children.map((child) => (
@@ -45,6 +57,8 @@ export function ItemNode({ node, addItemHandler }: ItemNodeProps) {
             key={child.id}
             node={child}
             addItemHandler={addItemHandler}
+            isVisible={isVisible}
+            setIsVisible={setIsVisible}
           />
         ))}
     </div>
