@@ -20,7 +20,8 @@ export function FileExplorer() {
 
   const [showAddItemInput, setShowAddItemInput] = useState(false);
 
-  const { activeNode, changeActiveNode } = useContext(FileExplorerContext);
+  const { activeNode, changeActiveNode, updateExpandedNodes } =
+    useContext(FileExplorerContext);
 
   function handleCreate(item: ItemType) {
     itemType = item;
@@ -47,6 +48,10 @@ export function FileExplorer() {
         parentId: newItemParentId,
       },
     ]);
+
+    if (itemType === "folder") {
+      updateExpandedNodes(newId);
+    }
 
     setShowAddItemInput(false);
   }
@@ -92,8 +97,8 @@ export function FileExplorer() {
           key={rootNode.id}
           node={rootNode}
           addItemHandler={handleEnterItem}
-          isVisible={showAddItemInput}
-          setIsVisible={setShowAddItemInput}
+          showAddItemInput={showAddItemInput}
+          setShowAddItemInput={setShowAddItemInput}
         />
       ))}
     </div>

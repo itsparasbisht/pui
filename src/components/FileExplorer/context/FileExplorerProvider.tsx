@@ -4,13 +4,34 @@ import type { TreeNode } from "../utils";
 
 export function FileExplorerProvider({ children }: { children: ReactNode }) {
   const [activeNode, setActiveNode] = useState<TreeNode | null>(null);
+  const [expandedNodes, setExpandedNodes] = useState<number[]>([]);
 
   function changeActiveNode(node: TreeNode | null) {
     setActiveNode(node);
+
+    if (node !== null && node.type === "folder") updateExpandedNodes(node.id);
+  }
+
+  function updateExpandedNodes(nodeId: number) {
+    const isNodeExpanded = expandedNodes.includes(nodeId);
+
+    if (isNodeExpanded) {
+      const filteredNodes = expandedNodes.filter((id) => id !== nodeId);
+      setExpandedNodes(filteredNodes);
+    } else {
+      setExpandedNodes((prev) => [...prev, nodeId]);
+    }
   }
 
   return (
-    <FileExplorerContext.Provider value={{ activeNode, changeActiveNode }}>
+    <FileExplorerContext.Provider
+      value={{
+        activeNode,
+        changeActiveNode,
+        expandedNodes,
+        updateExpandedNodes,
+      }}
+    >
       {children}
     </FileExplorerContext.Provider>
   );
