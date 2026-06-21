@@ -3,6 +3,7 @@ import { type TreeNode } from "./utils";
 import { AddItemInput } from "./AddItemInput";
 import { useContext } from "react";
 import { FileExplorerContext } from "./context/FileExplorerContext";
+import styles from "./ItemNode.module.css";
 
 type ItemNodeProps = {
   node: TreeNode;
@@ -22,8 +23,6 @@ export function ItemNode({
   const { activeNode, changeActiveNode, expandedNodes } =
     useContext(FileExplorerContext);
 
-  console.log(expandedNodes);
-
   const isExpanded = expandedNodes.includes(node.id);
 
   return (
@@ -36,7 +35,6 @@ export function ItemNode({
           cursor: "pointer",
           padding: "0.25rem 0.5rem",
           borderRadius: "4px",
-          backgroundColor: activeNode?.id === node.id ? "#c4c4c4" : "white",
         }}
         onClick={(e) => {
           e.stopPropagation();
@@ -45,8 +43,25 @@ export function ItemNode({
         }}
       >
         {isFolder && (
-          <details open={isExpanded}>
-            <summary>
+          <details
+            open={isExpanded}
+            style={{ width: "100%" }}
+            className={
+              activeNode?.id === node.id ||
+              (activeNode?.type === "file" && activeNode?.parentId === node.id)
+                ? styles.details
+                : styles.detailsInactive
+            }
+          >
+            <summary
+              onClick={(e) => e.preventDefault()}
+              style={{
+                width: "100%",
+                backgroundColor:
+                  activeNode?.id === node.id ? "#c4c4c4" : "white",
+              }}
+              className={styles.expandableNode}
+            >
               <Folder /> <span>{node.name}</span>
             </summary>
 
@@ -70,9 +85,17 @@ export function ItemNode({
         )}
 
         {!isFolder && (
-          <>
+          <div
+            style={{
+              backgroundColor: activeNode?.id === node.id ? "#c4c4c4" : "white",
+              width: "100%",
+              padding: "0.25rem 0.5rem",
+              borderRadius: "4px",
+            }}
+            className={styles.fileNode}
+          >
             <File /> <span>{node.name}</span>
-          </>
+          </div>
         )}
       </div>
 

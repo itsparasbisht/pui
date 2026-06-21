@@ -43,6 +43,7 @@ export function buildTree(items: ExplorerData[]) {
       tree.push(mappedItems[item.id]);
     } else {
       const parent = mappedItems[item.parentId];
+
       if (parent) {
         parent.children?.push(mappedItems[item.id]);
       }

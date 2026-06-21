@@ -1,0 +1,12 @@
+.expandableNode:hover,
+.fileNode:hover {
+    background-color: #e4e4e4 !important;
+}
+
+.details {
+    border-left: 2px solid black;
+}
+
+.detailsInactive:hover {
+    border-left: 2px solid #ccc;
+}
