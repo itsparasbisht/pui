@@ -1,10 +1,10 @@
 export type ItemType = "folder" | "file";
 
-export type ExplorerData = {
-  id: number;
+export type FileExplorerItem = {
+  id: string;
   name: string;
-  type: ItemType;
-  parentId: number | null;
+  type: "folder" | "file";
+  parentId: string | null;
 };
 
 export function generateId() {
@@ -17,10 +17,10 @@ export function generateId() {
 
 export type TreeNode = {
   children: TreeNode[];
-} & ExplorerData;
+} & FileExplorerItem;
 
-export function buildTree(items: ExplorerData[]) {
-  const mappedItems: Record<number, TreeNode> = {};
+export function buildTree(items: FileExplorerItem[]) {
+  const mappedItems: Record<string, TreeNode> = {};
 
   const tree: TreeNode[] = [];
 

@@ -4,8 +4,8 @@ import type { TreeNode } from "../utils";
 type fileExplorerContext = {
   activeNode: TreeNode | null;
   changeActiveNode?: (node: TreeNode | null) => void;
-  expandedNodes: number[];
-  updateExpandedNodes: (nodeId: number) => void;
+  expandedNodes: string[];
+  updateExpandedNodes: (nodeId: string) => void;
 };
 
 const initialState: fileExplorerContext = {
