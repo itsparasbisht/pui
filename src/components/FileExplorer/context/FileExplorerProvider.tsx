@@ -1,62 +1,65 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { FileExplorerContext } from "./FileExplorerContext";
-import type { FileExplorerItem, TreeNode } from "../utils";
+import { buildTree, generateId } from "../utils";
 import type { FileExplorerProps } from "../FileExplorer";
 
 type FileExplorerProviderProps = {
   children: ReactNode;
-} & Omit<FileExplorerProps, "onItemsChange" | "className">;
+} & Omit<FileExplorerProps, "className">;
+
+const getNextId = generateId();
 
 export function FileExplorerProvider({
   children,
   items,
-  selectedId,
+  onItemsChange,
   onSelectionChange,
   expandedIds,
   onExpandedChange,
 }: FileExplorerProviderProps) {
-  const [activeNode, setActiveNode] = useState<
-    TreeNode | FileExplorerItem | null
-  >(null);
-  const [expandedNodes, setExpandedNodes] = useState<string[]>(
-    expandedIds ?? [],
-  );
+  const tree = useMemo(() => buildTree(items), [items]);
 
-  useEffect(() => {
-    if (selectedId) {
-      const node = items.find((item) => item.id === selectedId) ?? null;
-      setActiveNode(node);
+  const [createDraft, setCreateDraft] = useState<
+    FileExplorerContext["createDraft"]
+  >({ type: "folder", parentId: null });
+
+  const [selectedId, setSelectedId] = useState(null);
+
+  function handleStartCreate(type: "file" | "folder") {
+    if (type === "file") {
+      setCreateDraft({ type: "file", parentId: null });
+    } else {
+      setCreateDraft({ type: "folder", parentId: null });
     }
-  }, [items, selectedId]);
-
-  function changeActiveNode(node: TreeNode | null) {
-    setActiveNode(node);
-
-    if (onSelectionChange) onSelectionChange(node);
-
-    if (node !== null && node.type === "folder") updateExpandedNodes(node.id);
   }
 
-  function updateExpandedNodes(nodeId: string) {
-    const isNodeExpanded = expandedNodes.includes(nodeId);
+  function handleCreateItem(name: string) {
+    const newId = getNextId().toString();
 
-    if (isNodeExpanded) {
-      const filteredNodes = expandedNodes.filter((id) => id !== nodeId);
-      setExpandedNodes(filteredNodes);
-
-      if (onExpandedChange) onExpandedChange(filteredNodes);
-    } else {
-      setExpandedNodes((prev) => [...prev, nodeId]);
-    }
+    onItemsChange([
+      ...items,
+      {
+        id: newId,
+        name,
+        type: createDraft?.type,
+        parentId: createDraft?.parentId,
+      },
+    ]);
   }
 
   return (
     <FileExplorerContext.Provider
       value={{
-        activeNode,
-        changeActiveNode,
-        expandedNodes,
-        updateExpandedNodes,
+        items,
+        tree,
+        selectedId,
+        // selectedItem,
+        // handleSelectItem,
+        // expandedIds,
+        // handleToggleExpand,
+        createDraft,
+        handleStartCreate,
+        handleCreateItem,
       }}
     >
       {children}

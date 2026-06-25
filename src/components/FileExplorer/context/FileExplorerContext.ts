@@ -1,19 +1,37 @@
 import { createContext } from "react";
-import type { TreeNode } from "../utils";
+import type { FileExplorerItem, TreeNode } from "../utils";
 
-type fileExplorerContext = {
-  activeNode: TreeNode | null;
-  changeActiveNode?: (node: TreeNode | null) => void;
-  expandedNodes: string[];
-  updateExpandedNodes: (nodeId: string) => void;
+export type FileExplorerContext = {
+  items: FileExplorerItem[];
+  tree: TreeNode[];
+
+  selectedId: string | null;
+  // selectedItem: FileExplorerItem | null;
+  // handleSelectItem: (id: string | null) => void;
+
+  // expandedIds: string[];
+  // handleToggleExpand: (id: string) => void;
+
+  createDraft: {
+    type: "file" | "folder";
+    parentId: string | null;
+  };
+  handleStartCreate: (type: "file" | "folder") => void;
+  handleCreateItem: (name: string) => void;
 };
 
-const initialState: fileExplorerContext = {
-  activeNode: null,
-  changeActiveNode: () => {},
-  expandedNodes: [],
-  updateExpandedNodes: () => {},
+const initialState: FileExplorerContext = {
+  items: [],
+  tree: [],
+  selectedId: null,
+  // selectedItem: null,
+  // handleSelectItem: () => {},
+  // expandedIds: [],
+  // handleToggleExpand: () => {},
+  createDraft: { type: "folder", parentId: null },
+  handleStartCreate: () => {},
+  handleCreateItem: () => {},
 };
 
 export const FileExplorerContext =
-  createContext<fileExplorerContext>(initialState);
+  createContext<FileExplorerContext>(initialState);

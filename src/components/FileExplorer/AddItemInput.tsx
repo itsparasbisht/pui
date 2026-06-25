@@ -1,17 +1,14 @@
-import { useState } from "react";
-import type { TreeNode } from "./utils";
+import { useContext, useState } from "react";
+import { FileExplorerContext } from "./context/FileExplorerContext";
 
-type AddItemInputProps = {
-  onAddItem: (name: string) => void;
-  currentNode: TreeNode | null;
-};
-
-export function AddItemInput({ onAddItem, currentNode }: AddItemInputProps) {
+export function AddItemInput() {
   const [inputValue, setInputValue] = useState("");
+
+  const { handleCreateItem } = useContext(FileExplorerContext);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-      onAddItem(inputValue);
+      handleCreateItem(inputValue);
       setInputValue("");
     }
   }
@@ -23,12 +20,6 @@ export function AddItemInput({ onAddItem, currentNode }: AddItemInputProps) {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        style={{
-          marginLeft: currentNode === null ? 0 : "30px",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
         autoFocus
       />
     </div>

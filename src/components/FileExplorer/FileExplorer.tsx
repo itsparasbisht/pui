@@ -5,8 +5,6 @@ import type { FileExplorerItem } from "./utils";
 export type FileExplorerProps = {
   items: FileExplorerItem[];
   onItemsChange: (items: FileExplorerItem[]) => void;
-
-  selectedId?: string | null;
   onSelectionChange?: (item: FileExplorerItem | null) => void;
 
   expandedIds?: string[];
@@ -18,26 +16,20 @@ export type FileExplorerProps = {
 export function FileExplorer({
   items,
   onItemsChange,
-  selectedId,
   onSelectionChange,
   expandedIds,
   onExpandedChange,
-  className,
 }: FileExplorerProps) {
   return (
     <>
       <FileExplorerProvider
         items={items}
-        selectedId={selectedId}
+        onItemsChange={onItemsChange}
         onSelectionChange={onSelectionChange}
         expandedIds={expandedIds}
         onExpandedChange={onExpandedChange}
       >
-        <FileExplorerTree
-          items={items}
-          onItemsChange={onItemsChange}
-          className={className}
-        />
+        <FileExplorerTree />
       </FileExplorerProvider>
     </>
   );
