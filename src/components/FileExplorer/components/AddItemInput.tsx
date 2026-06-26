@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { FileExplorerContext } from "./context/FileExplorerContext";
+import { FileExplorerContext } from "../context/FileExplorerContext";
 
 export function AddItemInput() {
   const [inputValue, setInputValue] = useState("");

@@ -1,0 +1,17 @@
+.item {
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    borderRadius: 4px;
+}
+
+.item:hover {
+    background-color: #e4e4e4;
+}
+
+.selectedItem {
+    background-color: #8f8f8f;
+}
+
+.selectedItem:hover {
+    background-color: #8f8f8f;
+}

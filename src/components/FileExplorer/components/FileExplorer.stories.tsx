@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import "../../styles/index.css";
+import "../../../styles/index.css";
 import { FileExplorer } from "./FileExplorer";
 import { useState } from "react";
-import type { FileExplorerItem } from "./utils";
+import type { FileExplorerItem } from "../utils";
 
 const meta = {
+  title: "components/FileExplorer",
   component: FileExplorer,
   args: {
     items: [],

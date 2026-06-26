@@ -1,6 +1,6 @@
-import { FileExplorerProvider } from "./context/FileExplorerProvider";
+import { FileExplorerProvider } from "../context/FileExplorerProvider";
 import { FileExplorerTree } from "./FileExplorerTree";
-import type { FileExplorerItem } from "./utils";
+import type { FileExplorerItem } from "../utils";
 
 export type FileExplorerProps = {
   items: FileExplorerItem[];

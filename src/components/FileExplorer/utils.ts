@@ -24,7 +24,7 @@ export function buildTree(items: FileExplorerItem[]) {
 
   const tree: TreeNode[] = [];
 
-  const sortedItems = items.sort((a, b) => {
+  const sortedItems = [...items].sort((a, b) => {
     if (a.type === "folder" && b.type === "file") {
       return -1;
     } else if (a.type === "file" && b.type === "folder") {

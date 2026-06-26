@@ -6,16 +6,17 @@ export type FileExplorerContext = {
   tree: TreeNode[];
 
   selectedId: string | null;
-  // selectedItem: FileExplorerItem | null;
-  // handleSelectItem: (id: string | null) => void;
+  selectedItem: FileExplorerItem | null;
+  handleSelectItem: (id: string | null) => void;
 
   // expandedIds: string[];
+  // isExpanded: (id: string) => boolean;
   // handleToggleExpand: (id: string) => void;
 
   createDraft: {
     type: "file" | "folder";
     parentId: string | null;
-  };
+  } | null;
   handleStartCreate: (type: "file" | "folder") => void;
   handleCreateItem: (name: string) => void;
 };
@@ -24,11 +25,12 @@ const initialState: FileExplorerContext = {
   items: [],
   tree: [],
   selectedId: null,
-  // selectedItem: null,
-  // handleSelectItem: () => {},
+  selectedItem: null,
+  handleSelectItem: () => {},
   // expandedIds: [],
+  // isExpanded: null,
   // handleToggleExpand: () => {},
-  createDraft: { type: "folder", parentId: null },
+  createDraft: null,
   handleStartCreate: () => {},
   handleCreateItem: () => {},
 };

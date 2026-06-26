@@ -3,10 +3,11 @@ import styles from "./FileExplorerTree.module.css";
 import { AddItemInput } from "./AddItemInput";
 import { ItemNode } from "./ItemNode";
 import { useContext } from "react";
-import { FileExplorerContext } from "./context/FileExplorerContext";
+import { FileExplorerContext } from "../context/FileExplorerContext";
 
 export function FileExplorerTree() {
-  const { tree, handleStartCreate } = useContext(FileExplorerContext);
+  const { tree, createDraft, handleStartCreate } =
+    useContext(FileExplorerContext);
 
   return (
     <div className={`${styles.container}`}>
@@ -19,7 +20,7 @@ export function FileExplorerTree() {
         </button>
       </div>
 
-      <AddItemInput />
+      {createDraft && <AddItemInput />}
 
       {tree.map((rootNode) => (
         <ItemNode key={rootNode.id} node={rootNode} />

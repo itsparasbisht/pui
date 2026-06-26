@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { FileExplorerContext } from "./FileExplorerContext";
-import { buildTree, generateId } from "../utils";
-import type { FileExplorerProps } from "../FileExplorer";
+import { buildTree, generateId, type FileExplorerItem } from "../utils";
+import type { FileExplorerProps } from "../components/FileExplorer";
 
 type FileExplorerProviderProps = {
   children: ReactNode;
@@ -19,11 +19,24 @@ export function FileExplorerProvider({
 }: FileExplorerProviderProps) {
   const tree = useMemo(() => buildTree(items), [items]);
 
-  const [createDraft, setCreateDraft] = useState<
-    FileExplorerContext["createDraft"]
-  >({ type: "folder", parentId: null });
+  const [createDraft, setCreateDraft] =
+    useState<FileExplorerContext["createDraft"]>(null);
 
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const selectedItem = useMemo(() => {
+    if (selectedId === null) return null;
+
+    return items.find((item) => item.id === selectedId) ?? null;
+  }, [items, selectedId]);
+
+  function handleSelectItem(id: string | null) {
+    setSelectedId(id);
+
+    const item = id ? (items.find((item) => item.id === id) ?? null) : null;
+
+    onSelectionChange?.(item);
+  }
 
   function handleStartCreate(type: "file" | "folder") {
     if (type === "file") {
@@ -36,15 +49,17 @@ export function FileExplorerProvider({
   function handleCreateItem(name: string) {
     const newId = getNextId().toString();
 
-    onItemsChange([
-      ...items,
-      {
-        id: newId,
-        name,
-        type: createDraft?.type,
-        parentId: createDraft?.parentId,
-      },
-    ]);
+    if (createDraft) {
+      onItemsChange([
+        ...items,
+        {
+          id: newId,
+          name,
+          type: createDraft?.type,
+          parentId: createDraft?.parentId,
+        },
+      ]);
+    }
   }
 
   return (
@@ -53,9 +68,10 @@ export function FileExplorerProvider({
         items,
         tree,
         selectedId,
-        // selectedItem,
-        // handleSelectItem,
+        selectedItem,
+        handleSelectItem,
         // expandedIds,
+        // isExpanded,
         // handleToggleExpand,
         createDraft,
         handleStartCreate,
