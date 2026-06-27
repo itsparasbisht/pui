@@ -19,6 +19,7 @@ export function FileExplorer({
   onSelectionChange,
   expandedIds,
   onExpandedChange,
+  className,
 }: FileExplorerProps) {
   return (
     <>
@@ -29,7 +30,7 @@ export function FileExplorer({
         expandedIds={expandedIds}
         onExpandedChange={onExpandedChange}
       >
-        <FileExplorerTree />
+        <FileExplorerTree className={className} />
       </FileExplorerProvider>
     </>
   );

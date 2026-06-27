@@ -1,7 +1,7 @@
 import { File, Folder } from "lucide-react";
 import { type TreeNode } from "../utils";
 import styles from "./ItemNode.module.css";
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import { FileExplorerContext } from "../context/FileExplorerContext";
 import { AddItemInput } from "./AddItemInput";
 
@@ -14,30 +14,25 @@ export function ItemNode({ node }: ItemNodeProps) {
     selectedId,
     handleSelectItem,
     handleCancelCreate,
-    createDraft,
-    selectedItem,
+    isExpanded,
+    handleToggleExpand,
+    shouldShowCreateInputAt,
   } = useContext(FileExplorerContext);
 
   const isSelected = selectedId === node.id;
   const isFolder = node.type === "folder";
 
-  const shouldShowAddInput = useCallback(() => {
-    if (createDraft && selectedItem && selectedItem.type === "file") {
-      return selectedItem.parentId === node.id;
-    } else if (createDraft) {
-      return selectedItem?.id === node.id;
-    }
-  }, [selectedItem, node.id, createDraft]);
-
   return (
     <div style={{ marginLeft: node.parentId === null ? 0 : "20px" }}>
       <div>
         {isFolder && (
-          <details>
+          <details open={isExpanded(node.id)}>
             <summary
               onClick={(e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 handleSelectItem(node.id);
+                handleToggleExpand(node.id);
                 handleCancelCreate();
               }}
               className={`${styles.item} ${isSelected && styles.selectedItem}`}
@@ -45,7 +40,7 @@ export function ItemNode({ node }: ItemNodeProps) {
               <Folder /> <span>{node.name}</span>
             </summary>
 
-            {shouldShowAddInput() && <AddItemInput />}
+            {shouldShowCreateInputAt(node.id) && <AddItemInput />}
 
             {node.children.map((child) => (
               <ItemNode key={child.id} node={child} />

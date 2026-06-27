@@ -1,13 +1,15 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { FileExplorerContext } from "./FileExplorerContext";
-import { buildTree, generateId } from "../utils";
+import {
+  buildTree,
+  validateCreateItemName,
+  createUniqueItemId,
+} from "../utils";
 import type { FileExplorerProps } from "../components/FileExplorer";
 
 type FileExplorerProviderProps = {
   children: ReactNode;
 } & Omit<FileExplorerProps, "className">;
-
-const getNextId = generateId();
 
 export function FileExplorerProvider({
   children,
@@ -23,6 +25,9 @@ export function FileExplorerProvider({
     useState<FileExplorerContext["createDraft"]>(null);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [internalExpandedIds, setInternalExpandedIds] = useState<string[]>([]);
+
+  const currentExpandedIds = expandedIds ?? internalExpandedIds;
 
   const selectedItem = useMemo(() => {
     if (selectedId === null) return null;
@@ -38,8 +43,34 @@ export function FileExplorerProvider({
     onSelectionChange?.(item);
   }
 
+  function setNextExpandedIds(nextExpandedIds: string[]) {
+    if (expandedIds === undefined) {
+      setInternalExpandedIds(nextExpandedIds);
+    }
+
+    onExpandedChange?.(nextExpandedIds);
+  }
+
+  function isExpanded(id: string) {
+    return currentExpandedIds.includes(id);
+  }
+
+  function handleToggleExpand(id: string) {
+    const nextExpandedIds = isExpanded(id)
+      ? currentExpandedIds.filter((expandedId) => expandedId !== id)
+      : [...currentExpandedIds, id];
+
+    setNextExpandedIds(nextExpandedIds);
+  }
+
+  function expandItem(id: string) {
+    if (isExpanded(id)) return;
+
+    setNextExpandedIds([...currentExpandedIds, id]);
+  }
+
   function handleStartCreate(type: "file" | "folder") {
-    let draftParentId;
+    let draftParentId: string | null;
 
     if (selectedItem && selectedItem.type === "folder") {
       draftParentId = selectedItem.id;
@@ -48,6 +79,10 @@ export function FileExplorerProvider({
     }
 
     setCreateDraft({ type, parentId: draftParentId });
+
+    if (draftParentId !== null) {
+      expandItem(draftParentId);
+    }
   }
 
   function handleCancelCreate() {
@@ -55,21 +90,37 @@ export function FileExplorerProvider({
   }
 
   function handleCreateItem(name: string) {
-    const newId = getNextId().toString();
+    const trimmedName = name.trim();
 
-    if (createDraft) {
-      onItemsChange([
-        ...items,
-        {
-          id: newId,
-          name,
-          type: createDraft?.type,
-          parentId: createDraft?.parentId,
-        },
-      ]);
+    if (!createDraft) return null;
 
-      setCreateDraft(null);
-    }
+    const validationError = validateCreateItemName({
+      name: trimmedName,
+      parentId: createDraft.parentId,
+      items,
+    });
+
+    if (validationError) return validationError;
+
+    const newId = createUniqueItemId(items.length);
+
+    onItemsChange([
+      ...items,
+      {
+        id: newId,
+        name: trimmedName,
+        type: createDraft.type,
+        parentId: createDraft.parentId,
+      },
+    ]);
+
+    setCreateDraft(null);
+
+    return null;
+  }
+
+  function shouldShowCreateInputAt(parentId: string | null) {
+    return createDraft?.parentId === parentId;
   }
 
   return (
@@ -80,13 +131,13 @@ export function FileExplorerProvider({
         selectedId,
         selectedItem,
         handleSelectItem,
-        // expandedIds,
-        // isExpanded,
-        // handleToggleExpand,
+        isExpanded,
+        handleToggleExpand,
         createDraft,
         handleStartCreate,
         handleCancelCreate,
         handleCreateItem,
+        shouldShowCreateInputAt,
       }}
     >
       {children}

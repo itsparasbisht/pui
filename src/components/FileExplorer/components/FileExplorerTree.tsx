@@ -2,33 +2,24 @@ import { FolderPlus, FilePlus } from "lucide-react";
 import styles from "./FileExplorerTree.module.css";
 import { AddItemInput } from "./AddItemInput";
 import { ItemNode } from "./ItemNode";
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import { FileExplorerContext } from "../context/FileExplorerContext";
 
-export function FileExplorerTree() {
+type FileExplorerTreeProps = {
+  className?: string;
+};
+
+export function FileExplorerTree({ className }: FileExplorerTreeProps) {
   const {
     tree,
-    createDraft,
     handleStartCreate,
     handleCancelCreate,
-    selectedItem,
+    shouldShowCreateInputAt,
   } = useContext(FileExplorerContext);
-
-  const shouldShowAddInput = useCallback(() => {
-    if (createDraft && selectedItem && selectedItem.type === "file") {
-      return selectedItem.parentId === null;
-    } else if (createDraft && selectedItem?.type === "folder") {
-      return false;
-    } else if (createDraft && selectedItem === null) {
-      return true;
-    }
-
-    return false;
-  }, [selectedItem, createDraft]);
 
   return (
     <div
-      className={`${styles.container}`}
+      className={`${styles.container} ${className ?? ""}`.trim()}
       onClick={(e) => {
         e.stopPropagation();
         handleCancelCreate();
@@ -36,6 +27,8 @@ export function FileExplorerTree() {
     >
       <div>
         <button
+          type="button"
+          aria-label="New folder"
           onClick={(e) => {
             e.stopPropagation();
             handleStartCreate("folder");
@@ -44,6 +37,8 @@ export function FileExplorerTree() {
           <FolderPlus />
         </button>
         <button
+          type="button"
+          aria-label="New file"
           onClick={(e) => {
             e.stopPropagation();
             handleStartCreate("file");
@@ -53,7 +48,7 @@ export function FileExplorerTree() {
         </button>
       </div>
 
-      {shouldShowAddInput() && <AddItemInput />}
+      {shouldShowCreateInputAt(null) && <AddItemInput />}
 
       {tree.map((rootNode) => (
         <ItemNode key={rootNode.id} node={rootNode} />

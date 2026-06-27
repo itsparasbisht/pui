@@ -9,9 +9,8 @@ export type FileExplorerContext = {
   selectedItem: FileExplorerItem | null;
   handleSelectItem: (id: string | null) => void;
 
-  // expandedIds: string[];
-  // isExpanded: (id: string) => boolean;
-  // handleToggleExpand: (id: string) => void;
+  isExpanded: (id: string) => boolean;
+  handleToggleExpand: (id: string) => void;
 
   createDraft: {
     type: "file" | "folder";
@@ -19,7 +18,8 @@ export type FileExplorerContext = {
   } | null;
   handleStartCreate: (type: "file" | "folder") => void;
   handleCancelCreate: () => void;
-  handleCreateItem: (name: string) => void;
+  handleCreateItem: (name: string) => string | null;
+  shouldShowCreateInputAt: (parentId: string | null) => boolean;
 };
 
 const initialState: FileExplorerContext = {
@@ -28,13 +28,13 @@ const initialState: FileExplorerContext = {
   selectedId: null,
   selectedItem: null,
   handleSelectItem: () => {},
-  // expandedIds: [],
-  // isExpanded: null,
-  // handleToggleExpand: () => {},
+  isExpanded: () => false,
+  handleToggleExpand: () => {},
   createDraft: null,
   handleStartCreate: () => {},
   handleCancelCreate: () => {},
-  handleCreateItem: () => {},
+  handleCreateItem: () => null,
+  shouldShowCreateInputAt: () => false,
 };
 
 export const FileExplorerContext =
