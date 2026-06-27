@@ -18,6 +18,7 @@ export type FileExplorerContext = {
     parentId: string | null;
   } | null;
   handleStartCreate: (type: "file" | "folder") => void;
+  handleCancelCreate: () => void;
   handleCreateItem: (name: string) => void;
 };
 
@@ -32,6 +33,7 @@ const initialState: FileExplorerContext = {
   // handleToggleExpand: () => {},
   createDraft: null,
   handleStartCreate: () => {},
+  handleCancelCreate: () => {},
   handleCreateItem: () => {},
 };
 

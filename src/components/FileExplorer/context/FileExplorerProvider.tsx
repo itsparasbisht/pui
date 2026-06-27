@@ -1,6 +1,6 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { FileExplorerContext } from "./FileExplorerContext";
-import { buildTree, generateId, type FileExplorerItem } from "../utils";
+import { buildTree, generateId } from "../utils";
 import type { FileExplorerProps } from "../components/FileExplorer";
 
 type FileExplorerProviderProps = {
@@ -39,11 +39,19 @@ export function FileExplorerProvider({
   }
 
   function handleStartCreate(type: "file" | "folder") {
-    if (type === "file") {
-      setCreateDraft({ type: "file", parentId: null });
+    let draftParentId;
+
+    if (selectedItem && selectedItem.type === "folder") {
+      draftParentId = selectedItem.id;
     } else {
-      setCreateDraft({ type: "folder", parentId: null });
+      draftParentId = selectedItem ? selectedItem.parentId : null;
     }
+
+    setCreateDraft({ type, parentId: draftParentId });
+  }
+
+  function handleCancelCreate() {
+    setCreateDraft(null);
   }
 
   function handleCreateItem(name: string) {
@@ -59,6 +67,8 @@ export function FileExplorerProvider({
           parentId: createDraft?.parentId,
         },
       ]);
+
+      setCreateDraft(null);
     }
   }
 
@@ -75,6 +85,7 @@ export function FileExplorerProvider({
         // handleToggleExpand,
         createDraft,
         handleStartCreate,
+        handleCancelCreate,
         handleCreateItem,
       }}
     >
