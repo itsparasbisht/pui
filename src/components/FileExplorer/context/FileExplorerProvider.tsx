@@ -69,10 +69,15 @@ export function FileExplorerProvider({
     setNextExpandedIds([...currentExpandedIds, id]);
   }
 
-  function handleStartCreate(type: "file" | "folder") {
+  function handleStartCreate(
+    type: "file" | "folder",
+    targetParentId?: string | null,
+  ) {
     let draftParentId: string | null;
 
-    if (selectedItem && selectedItem.type === "folder") {
+    if (targetParentId !== undefined) {
+      draftParentId = targetParentId;
+    } else if (selectedItem && selectedItem.type === "folder") {
       draftParentId = selectedItem.id;
     } else {
       draftParentId = selectedItem ? selectedItem.parentId : null;
@@ -87,6 +92,7 @@ export function FileExplorerProvider({
 
   function handleCancelCreate() {
     setCreateDraft(null);
+    setSelectedId(null);
   }
 
   function handleCreateItem(name: string) {

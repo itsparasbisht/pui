@@ -16,7 +16,7 @@ export type FileExplorerContext = {
     type: "file" | "folder";
     parentId: string | null;
   } | null;
-  handleStartCreate: (type: "file" | "folder") => void;
+  handleStartCreate: (type: "file" | "folder", targetParentId?: string | null) => void;
   handleCancelCreate: () => void;
   handleCreateItem: (name: string) => string | null;
   shouldShowCreateInputAt: (parentId: string | null) => boolean;

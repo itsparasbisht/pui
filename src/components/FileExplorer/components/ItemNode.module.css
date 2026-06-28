@@ -2,6 +2,10 @@
     cursor: pointer;
     padding: 0.25rem 0.5rem;
     borderRadius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
 }
 
 .item:hover {
@@ -14,4 +18,71 @@
 
 .selectedItem:hover {
     background-color: #8f8f8f;
+}
+
+.itemContent {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.menuContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.menuButton {
+    background: none;
+    border: none;
+    padding: 2px;
+    border-radius: 4px;
+    color: #666;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.menuButton:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: #000;
+}
+
+.item:hover .menuButton,
+.menuButtonOpen {
+    display: inline-flex;
+}
+
+.dropdownMenu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 100;
+    margin-top: 4px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    padding: 4px 0;
+    min-width: 100px;
+}
+
+.dropdownMenu button {
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: #333333;
+    width: 100%;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.dropdownMenu button:hover {
+    background-color: #f0f0f0;
 }
