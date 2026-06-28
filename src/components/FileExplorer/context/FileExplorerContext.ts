@@ -20,6 +20,8 @@ export type FileExplorerContext = {
   handleCancelCreate: () => void;
   handleCreateItem: (name: string) => string | null;
   shouldShowCreateInputAt: (parentId: string | null) => boolean;
+  handleDeleteItem: (id: string) => void;
+  handleRenameItem: (id: string, name: string) => string | null;
 };
 
 const initialState: FileExplorerContext = {
@@ -35,6 +37,8 @@ const initialState: FileExplorerContext = {
   handleCancelCreate: () => {},
   handleCreateItem: () => null,
   shouldShowCreateInputAt: () => false,
+  handleDeleteItem: () => {},
+  handleRenameItem: () => null,
 };
 
 export const FileExplorerContext =

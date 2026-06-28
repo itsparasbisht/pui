@@ -129,6 +129,52 @@ export function FileExplorerProvider({
     return createDraft?.parentId === parentId;
   }
 
+  function handleDeleteItem(id: string) {
+    const idsToDelete = new Set<string>([id]);
+    let addedNew = true;
+    while (addedNew) {
+      addedNew = false;
+      for (const item of items) {
+        if (item.parentId && idsToDelete.has(item.parentId) && !idsToDelete.has(item.id)) {
+          idsToDelete.add(item.id);
+          addedNew = true;
+        }
+      }
+    }
+
+    const remainingItems = items.filter((item) => !idsToDelete.has(item.id));
+    onItemsChange(remainingItems);
+
+    if (selectedId && idsToDelete.has(selectedId)) {
+      handleSelectItem(null);
+    }
+  }
+
+  function handleRenameItem(id: string, name: string): string | null {
+    const trimmedName = name.trim();
+    const itemToRename = items.find((item) => item.id === id);
+    if (!itemToRename) return "Item not found";
+
+    if (itemToRename.name.trim().toLowerCase() === trimmedName.toLowerCase()) {
+      return null;
+    }
+
+    const validationError = validateCreateItemName({
+      name: trimmedName,
+      parentId: itemToRename.parentId,
+      items: items.filter((item) => item.id !== id),
+    });
+
+    if (validationError) return validationError;
+
+    const updatedItems = items.map((item) =>
+      item.id === id ? { ...item, name: trimmedName } : item
+    );
+    onItemsChange(updatedItems);
+
+    return null;
+  }
+
   return (
     <FileExplorerContext.Provider
       value={{
@@ -144,6 +190,8 @@ export function FileExplorerProvider({
         handleCancelCreate,
         handleCreateItem,
         shouldShowCreateInputAt,
+        handleDeleteItem,
+        handleRenameItem,
       }}
     >
       {children}

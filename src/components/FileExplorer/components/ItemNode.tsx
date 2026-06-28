@@ -19,10 +19,17 @@ export function ItemNode({ node }: ItemNodeProps) {
     handleToggleExpand,
     shouldShowCreateInputAt,
     handleStartCreate,
+    handleDeleteItem,
+    handleRenameItem,
   } = useContext(FileExplorerContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [renameValue, setRenameValue] = useState(node.name);
+  const [renameError, setRenameError] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+
 
   useEffect(() => {
     if (!isMenuOpen) return;
@@ -42,6 +49,45 @@ export function ItemNode({ node }: ItemNodeProps) {
   const isSelected = selectedId === node.id;
   const isFolder = node.type === "folder";
 
+  function submitRename() {
+    const error = handleRenameItem(node.id, renameValue);
+    if (error) {
+      setRenameError(error);
+      return false;
+    }
+    setIsRenaming(false);
+    setRenameError(null);
+    return true;
+  }
+
+  function handleRenameKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      e.stopPropagation();
+      submitRename();
+    }
+    if (e.key === "Escape") {
+      e.stopPropagation();
+      setIsRenaming(false);
+      setRenameValue(node.name);
+      setRenameError(null);
+    }
+  }
+
+  function handleRenameBlur() {
+    const trimmed = renameValue.trim();
+    if (trimmed === node.name.trim()) {
+      setIsRenaming(false);
+      setRenameError(null);
+      return;
+    }
+    const error = handleRenameItem(node.id, renameValue);
+    setIsRenaming(false);
+    setRenameError(null);
+    if (error) {
+      setRenameValue(node.name);
+    }
+  }
+
   return (
     <div style={{ marginLeft: node.parentId === null ? 0 : "20px" }}>
       <div>
@@ -59,49 +105,98 @@ export function ItemNode({ node }: ItemNodeProps) {
               }}
               className={`${styles.item} ${isSelected && styles.selectedItem}`}
             >
-              <div className={styles.itemContent}>
-                <Folder /> <span>{node.name}</span>
-              </div>
-              <div className={styles.menuContainer} ref={menuRef}>
-                <button
-                  type="button"
-                  className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
+              {isRenaming ? (
+                <div
+                  className={styles.renameContainer}
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    setIsMenuOpen((prev) => !prev);
                   }}
-                  aria-label="More options"
                 >
-                  <MoreVertical size={16} />
-                </button>
-                {isMenuOpen && (
-                  <div className={styles.dropdownMenu}>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handleStartCreate("file", node.id);
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      Add File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handleStartCreate("folder", node.id);
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      Add Folder
-                    </button>
+                  <Folder />
+                  <div style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                    <input
+                      type="text"
+                      value={renameValue}
+                      onChange={(e) => setRenameValue(e.target.value)}
+                      onKeyDown={handleRenameKeyDown}
+                      onBlur={handleRenameBlur}
+                      className={styles.renameInput}
+                      autoFocus
+                    />
+                    {renameError && <div className={styles.renameError} role="alert">{renameError}</div>}
                   </div>
-                )}
-              </div>
+                </div>
+              ) : (
+                <>
+                  <div className={styles.itemContent}>
+                    <Folder /> <span>{node.name}</span>
+                  </div>
+                  <div className={styles.menuContainer} ref={menuRef}>
+                    <button
+                      type="button"
+                      className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setIsMenuOpen((prev) => !prev);
+                      }}
+                      aria-label="More options"
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {isMenuOpen && (
+                      <div className={styles.dropdownMenu}>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleStartCreate("file", node.id);
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Add File
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleStartCreate("folder", node.id);
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Add Folder
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setRenameValue(node.name);
+                            setIsRenaming(true);
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Rename
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleDeleteItem(node.id);
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </summary>
 
             {shouldShowCreateInputAt(node.id) && <AddItemInput />}
@@ -123,9 +218,76 @@ export function ItemNode({ node }: ItemNodeProps) {
               }
             }}
           >
-            <div className={styles.itemContent}>
-              <File /> <span>{node.name}</span>
-            </div>
+            {isRenaming ? (
+              <div
+                className={styles.renameContainer}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                }}
+              >
+                <File />
+                <div style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                  <input
+                    type="text"
+                    value={renameValue}
+                    onChange={(e) => setRenameValue(e.target.value)}
+                    onKeyDown={handleRenameKeyDown}
+                    onBlur={handleRenameBlur}
+                    className={styles.renameInput}
+                    autoFocus
+                  />
+                  {renameError && <div className={styles.renameError} role="alert">{renameError}</div>}
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className={styles.itemContent}>
+                  <File /> <span>{node.name}</span>
+                </div>
+                <div className={styles.menuContainer} ref={menuRef}>
+                  <button
+                    type="button"
+                    className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setIsMenuOpen((prev) => !prev);
+                    }}
+                    aria-label="More options"
+                  >
+                    <MoreVertical size={16} />
+                  </button>
+                  {isMenuOpen && (
+                    <div className={styles.dropdownMenu}>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setRenameValue(node.name);
+                          setIsRenaming(true);
+                          setIsMenuOpen(false);
+                        }}
+                      >
+                        Rename
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleDeleteItem(node.id);
+                          setIsMenuOpen(false);
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>

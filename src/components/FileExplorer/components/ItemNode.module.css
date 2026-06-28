@@ -86,3 +86,26 @@
 .dropdownMenu button:hover {
     background-color: #f0f0f0;
 }
+
+.renameContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.renameInput {
+    flex-grow: 1;
+    font-size: 14px;
+    padding: 2px 4px;
+    border: 1px solid #007acc;
+    border-radius: 2px;
+    outline: none;
+}
+
+.renameError {
+    color: #ff0000;
+    font-size: 11px;
+    margin-top: 2px;
+}
