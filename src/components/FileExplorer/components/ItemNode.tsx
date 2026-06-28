@@ -1,4 +1,4 @@
-import { File, Folder, MoreVertical } from "lucide-react";
+import { File, Folder, MoreVertical, ChevronRight, FolderOpen } from "lucide-react";
 import { type TreeNode } from "../utils";
 import styles from "./ItemNode.module.css";
 import { useContext, useState, useRef, useEffect } from "react";
@@ -28,8 +28,6 @@ export function ItemNode({ node }: ItemNodeProps) {
   const [renameValue, setRenameValue] = useState(node.name);
   const [renameError, setRenameError] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-
-
 
   useEffect(() => {
     if (!isMenuOpen) return;
@@ -89,7 +87,7 @@ export function ItemNode({ node }: ItemNodeProps) {
   }
 
   return (
-    <div style={{ marginLeft: node.parentId === null ? 0 : "20px" }}>
+    <div style={{ marginLeft: node.parentId === null ? 0 : "16px" }}>
       <div>
         {isFolder && (
           <details open={isExpanded(node.id)}>
@@ -113,8 +111,9 @@ export function ItemNode({ node }: ItemNodeProps) {
                     e.preventDefault();
                   }}
                 >
-                  <Folder />
-                  <div style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                  <div className={styles.renameRow}>
+                    <ChevronRight className={`${styles.chevron} ${isExpanded(node.id) ? styles.chevronExpanded : ""}`} size={14} />
+                    {isExpanded(node.id) ? <FolderOpen size={16} /> : <Folder size={16} />}
                     <input
                       type="text"
                       value={renameValue}
@@ -124,13 +123,19 @@ export function ItemNode({ node }: ItemNodeProps) {
                       className={styles.renameInput}
                       autoFocus
                     />
-                    {renameError && <div className={styles.renameError} role="alert">{renameError}</div>}
                   </div>
+                  {renameError && (
+                    <div className={styles.renameError} role="alert">
+                      {renameError}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>
                   <div className={styles.itemContent}>
-                    <Folder /> <span>{node.name}</span>
+                    <ChevronRight className={`${styles.chevron} ${isExpanded(node.id) ? styles.chevronExpanded : ""}`} size={14} />
+                    {isExpanded(node.id) ? <FolderOpen size={16} /> : <Folder size={16} />}
+                    <span className={styles.itemName}>{node.name}</span>
                   </div>
                   <div className={styles.menuContainer} ref={menuRef}>
                     <button
@@ -226,8 +231,9 @@ export function ItemNode({ node }: ItemNodeProps) {
                   e.preventDefault();
                 }}
               >
-                <File />
-                <div style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+                <div className={styles.renameRow}>
+                  <div className={styles.spacer} />
+                  <File size={16} />
                   <input
                     type="text"
                     value={renameValue}
@@ -237,13 +243,18 @@ export function ItemNode({ node }: ItemNodeProps) {
                     className={styles.renameInput}
                     autoFocus
                   />
-                  {renameError && <div className={styles.renameError} role="alert">{renameError}</div>}
                 </div>
+                {renameError && (
+                  <div className={styles.renameError} role="alert">
+                    {renameError}
+                  </div>
+                )}
               </div>
             ) : (
               <>
                 <div className={styles.itemContent}>
-                  <File /> <span>{node.name}</span>
+                  <div className={styles.spacer} />
+                  <File size={16} /> <span className={styles.itemName}>{node.name}</span>
                 </div>
                 <div className={styles.menuContainer} ref={menuRef}>
                   <button

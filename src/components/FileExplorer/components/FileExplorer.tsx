@@ -11,6 +11,7 @@ export type FileExplorerProps = {
   onExpandedChange?: (expandedIds: string[]) => void;
 
   className?: string;
+  theme?: "light" | "dark";
 };
 
 export function FileExplorer({
@@ -20,6 +21,7 @@ export function FileExplorer({
   expandedIds,
   onExpandedChange,
   className,
+  theme = "dark",
 }: FileExplorerProps) {
   return (
     <>
@@ -30,7 +32,7 @@ export function FileExplorer({
         expandedIds={expandedIds}
         onExpandedChange={onExpandedChange}
       >
-        <FileExplorerTree className={className} />
+        <FileExplorerTree className={className} theme={theme} />
       </FileExplorerProvider>
     </>
   );

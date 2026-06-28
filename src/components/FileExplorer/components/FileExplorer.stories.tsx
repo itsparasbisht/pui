@@ -21,6 +21,10 @@ export const Default: Story = {
   render: () => {
     const [items, setItems] = useState<FileExplorerItem[]>([]);
 
-    return <FileExplorer items={items} onItemsChange={setItems} />;
+    return (
+      <div data-pui-theme="dark">
+        <FileExplorer items={items} onItemsChange={setItems} />
+      </div>
+    );
   },
 };
