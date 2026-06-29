@@ -40,6 +40,7 @@ export default defineConfig({
     },
   },
   test: {
+    globals: true,
     projects: [
       {
         extends: true,
@@ -62,6 +63,14 @@ export default defineConfig({
               },
             ],
           },
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "unit",
+          environment: "jsdom",
+          include: ["src/**/*.test.{ts,tsx}"],
         },
       },
     ],
