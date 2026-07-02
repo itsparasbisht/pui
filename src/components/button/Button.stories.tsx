@@ -6,7 +6,7 @@ import "../../styles/index.css";
 const meta = {
   component: Button,
   args: {
-    children: "Hello UI",
+    children: "Hello PUI",
   },
   argTypes: {
     children: {

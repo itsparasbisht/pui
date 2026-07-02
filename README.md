@@ -1,75 +1,104 @@
-# React + TypeScript + Vite
+# @paras.in/pui
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript component library built with Vite, styled with CSS, and documented with Storybook.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+- 📦 **Dual Output**: Bundled in both ES Modules (`.js`) and CommonJS (`.cjs`) formats.
+- 🛡️ **TypeScript Support**: Native, auto-generated `.d.ts` type declarations.
+- 🎨 **Vanilla CSS Styling**: Zero-dependency styling for maximum speed and control.
+- 🧪 **Robust Testing**: Fully tested using Vitest and Storybook Test runners.
+- 📖 **Visual Documentation**: Fully interactive playground using Storybook.
+- 🦋 **Automated Publishing**: Streamlined versioning and releases with Changesets.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+---
 
-Note: This will impact Vite dev & build performances.
+## 📦 Installation
 
-## Expanding the ESLint configuration
+To install the library, run:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install @paras.in/pui
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Setup styles
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Make sure to import the CSS file in your main application entry point (e.g., `main.tsx` or `App.tsx`):
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```tsx
+import "@paras.in/pui/style.css";
 ```
+
+---
+
+## 🛠️ Usage
+
+```tsx
+import React from "react";
+import { Button, FileExplorer } from "@paras.in/pui";
+
+const App = () => {
+  return (
+    <div>
+      <Button variant="primary">Click Me</Button>
+      <FileExplorer data={/* folder structure data */} />
+    </div>
+  );
+};
+```
+
+---
+
+## 💻 Local Development
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Run Storybook
+
+Launch the interactive Storybook playground to view and design components:
+
+```bash
+npm run storybook
+```
+
+### 3. Run Tests
+
+Run unit tests with Vitest:
+
+```bash
+npm run test
+```
+
+### 4. Build the Library
+
+Build both commonjs/esm bundles and generate type files in the `dist` folder:
+
+```bash
+npm run build
+```
+
+---
+
+## 🦋 Release & Contribution Workflow
+
+This repository uses **Changesets** to automate version bumps and release logs.
+
+### When making a code contribution:
+
+1. Create a feature branch:
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+2. Write your code and tests.
+3. Before opening/merging a Pull Request, run the changeset command:
+   ```bash
+   npm run changeset
+   ```
+4. Follow the interactive prompts to choose the version bump type (`major`, `minor`, or `patch`) and write a summary of the change.
+5. Commit the generated `.changeset/xxxx.md` file along with your code and merge it into `main`!

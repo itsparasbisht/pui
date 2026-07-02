@@ -1,23 +1,38 @@
 {
-  "name": "pui",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@paras.in/pui",
+  "version": "0.1.0",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build && tsc -b",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "vitest run --project=unit"
+    "test": "vitest run --project=unit",
+    "changeset": "changeset"
   },
-  "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6"
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
+    "@changesets/cli": "^2.31.0",
     "@chromatic-com/storybook": "^5.2.1",
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
@@ -37,6 +52,7 @@
     "@vitest/browser-playwright": "^4.1.8",
     "@vitest/coverage-v8": "^4.1.8",
     "babel-plugin-react-compiler": "^1.0.0",
+    "chromatic": "^18.0.0",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
@@ -45,6 +61,8 @@
     "jsdom": "^29.1.1",
     "lucide-react": "^1.18.0",
     "playwright": "^1.60.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "storybook": "^10.4.3",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
