@@ -1,6 +1,28 @@
 {
   "name": "@paras.in/pui",
   "version": "0.1.0",
+  "description": "A React and TypeScript component library focused on complex workspace UI components.",
+  "author": "Paras Bisht",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "typescript",
+    "component-library",
+    "file-explorer",
+    "directory-tree",
+    "workspace-ui",
+    "interactive-tree",
+    "vite",
+    "storybook"
+  ],
+  "homepage": "https://github.com/itsparasbisht/pui#readme",
+  "bugs": {
+    "url": "https://github.com/itsparasbisht/pui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsparasbisht/pui.git"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

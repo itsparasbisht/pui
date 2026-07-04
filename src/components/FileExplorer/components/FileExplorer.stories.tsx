@@ -84,7 +84,7 @@ export const Default: Story = {
 
     return (
       <div
-        style={{ padding: "20px" }}
+        style={{ padding: "20px", height: "500px" }}
       >
         <FileExplorer
           items={items}
@@ -113,7 +113,7 @@ export const EmptyState: Story = {
 
     return (
       <div
-        style={{ padding: "20px" }}
+        style={{ padding: "20px", height: "400px" }}
       >
         <FileExplorer
           items={items}
@@ -148,6 +148,7 @@ export const Themes: Story = {
           padding: "20px",
           background: "var(--pui-color-surface)",
           borderRadius: "8px",
+          height: "500px",
         }}
       >
         <div>
@@ -212,7 +213,7 @@ export const DeepNesting: Story = {
 
     return (
       <div
-        style={{ padding: "20px" }}
+        style={{ padding: "20px", height: "500px" }}
       >
         <FileExplorer
           items={items}
@@ -241,7 +242,7 @@ export const LongNames: Story = {
 
     return (
       <div
-        style={{ padding: "20px" }}
+        style={{ padding: "20px", height: "500px" }}
       >
         <FileExplorer
           items={items}
@@ -273,7 +274,7 @@ const ControlledExpansionDemo = () => {
         maxWidth: "600px",
       }}
     >
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, height: "500px" }}>
         <FileExplorer
           items={items}
           onItemsChange={setItems}

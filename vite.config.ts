@@ -1,8 +1,7 @@
 /// <reference types="vitest/config" />
 import { resolve } from "node:path";
 import { defineConfig } from "vite";
-import react, { reactCompilerPreset } from "@vitejs/plugin-react";
-import babel from "@rolldown/plugin-babel";
+import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 import path from "node:path";
@@ -18,9 +17,6 @@ const dirname =
 export default defineConfig({
   plugins: [
     react(),
-    babel({
-      presets: [reactCompilerPreset()],
-    }),
   ],
   build: {
     lib: {
