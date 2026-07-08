@@ -7,6 +7,7 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    if: github.head_ref != 'changeset-release/main'
     steps:
       - uses: actions/checkout@v4
         with:
