@@ -25,6 +25,13 @@ details > summary {
     background-color: var(--pui-color-surface-hover);
 }
 
+.item:focus-visible {
+    outline: 1px solid var(--pui-color-primary);
+    outline-offset: -1px;
+    background-color: var(--pui-color-surface-hover);
+}
+
+
 .selectedItem {
     background-color: var(--pui-color-surface-selected);
     color: var(--pui-color-surface-selected-fg);

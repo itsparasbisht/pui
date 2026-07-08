@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FileExplorer } from "./FileExplorer";
 import { buildTree, validateCreateItemName } from "../utils";
@@ -267,4 +267,54 @@ describe("FileExplorer Component", () => {
       ])
     );
   });
+
+  it("supports keyboard navigation following WAI-ARIA Tree View patterns", async () => {
+    const user = userEvent.setup();
+    const items: FileExplorerItem[] = [
+      { id: "1", name: "src", type: "folder", parentId: null },
+      { id: "2", name: "components", type: "folder", parentId: "1" },
+      { id: "3", name: "package.json", type: "file", parentId: null },
+    ];
+
+    render(<FileExplorer items={items} onItemsChange={vi.fn()} />);
+
+    const srcItem = screen.getByRole("treeitem", { name: "src" });
+    const packageItem = screen.getByRole("treeitem", { name: "package.json" });
+
+    expect(srcItem).toHaveAttribute("tabindex", "0");
+    expect(packageItem).toHaveAttribute("tabindex", "-1");
+
+    act(() => {
+      srcItem.focus();
+    });
+    expect(document.activeElement).toBe(srcItem);
+
+    await user.keyboard("{ArrowRight}");
+    expect(srcItem).toHaveAttribute("aria-expanded", "true");
+
+    const componentsItem = screen.getByRole("treeitem", { name: "components" });
+    expect(componentsItem).toHaveAttribute("tabindex", "-1");
+
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toBe(componentsItem);
+
+    await user.keyboard("{ArrowDown}");
+    expect(document.activeElement).toBe(packageItem);
+
+    await user.keyboard("{ArrowUp}");
+    expect(document.activeElement).toBe(componentsItem);
+
+    await user.keyboard("{End}");
+    expect(document.activeElement).toBe(packageItem);
+
+    await user.keyboard("{Home}");
+    expect(document.activeElement).toBe(srcItem);
+
+    await user.keyboard("{ArrowLeft}");
+    expect(srcItem).toHaveAttribute("aria-expanded", "false");
+
+    await user.keyboard("p");
+    expect(document.activeElement).toBe(packageItem);
+  });
 });
+

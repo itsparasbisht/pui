@@ -21,6 +21,10 @@ export function ItemNode({ node }: ItemNodeProps) {
     handleStartCreate,
     handleDeleteItem,
     handleRenameItem,
+    focusedId,
+    handleFocusItem,
+    visibleNodes,
+    handleKeyDown,
   } = useContext(FileExplorerContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +32,7 @@ export function ItemNode({ node }: ItemNodeProps) {
   const [renameValue, setRenameValue] = useState(node.name);
   const [renameError, setRenameError] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const elementRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (!isMenuOpen) return;
@@ -44,8 +49,21 @@ export function ItemNode({ node }: ItemNodeProps) {
     };
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    if (focusedId === node.id && elementRef.current) {
+      elementRef.current.focus();
+    }
+  }, [focusedId, node.id]);
+
   const isSelected = selectedId === node.id;
   const isFolder = node.type === "folder";
+
+  const isFirstVisibleNode = visibleNodes.length > 0 && visibleNodes[0].id === node.id;
+  const isTabFocusable =
+    focusedId === node.id ||
+    (focusedId === null &&
+      (selectedId === node.id || (selectedId === null && isFirstVisibleNode)));
+  const tabIndex = isTabFocusable ? 0 : -1;
 
   function submitRename() {
     const error = handleRenameItem(node.id, renameValue);
@@ -92,6 +110,11 @@ export function ItemNode({ node }: ItemNodeProps) {
         {isFolder && (
           <details open={isExpanded(node.id)}>
             <summary
+              ref={elementRef as React.RefObject<HTMLElement>}
+              tabIndex={tabIndex}
+              role="treeitem"
+              aria-selected={isSelected}
+              aria-expanded={isExpanded(node.id)}
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -100,6 +123,11 @@ export function ItemNode({ node }: ItemNodeProps) {
                 if (createDraft) {
                   handleCancelCreate();
                 }
+              }}
+              onKeyDown={(e) => handleKeyDown(e, node)}
+              onFocus={(e) => {
+                e.stopPropagation();
+                handleFocusItem(node.id);
               }}
               className={`${styles.item} ${isSelected && styles.selectedItem}`}
             >
@@ -206,14 +234,20 @@ export function ItemNode({ node }: ItemNodeProps) {
 
             {shouldShowCreateInputAt(node.id) && <AddItemInput />}
 
-            {node.children.map((child) => (
-              <ItemNode key={child.id} node={child} />
-            ))}
+            <div role="group">
+              {node.children.map((child) => (
+                <ItemNode key={child.id} node={child} />
+              ))}
+            </div>
           </details>
         )}
 
         {!isFolder && (
           <div
+            ref={elementRef as React.RefObject<HTMLDivElement>}
+            tabIndex={tabIndex}
+            role="treeitem"
+            aria-selected={isSelected}
             className={`${styles.item} ${isSelected && styles.selectedItem}`}
             onClick={(e) => {
               e.stopPropagation();
@@ -221,6 +255,11 @@ export function ItemNode({ node }: ItemNodeProps) {
               if (createDraft) {
                 handleCancelCreate();
               }
+            }}
+            onKeyDown={(e) => handleKeyDown(e, node)}
+            onFocus={(e) => {
+              e.stopPropagation();
+              handleFocusItem(node.id);
             }}
           >
             {isRenaming ? (

@@ -52,7 +52,7 @@ export function FileExplorerTree({ className, theme }: FileExplorerTreeProps) {
         </button>
       </div>
 
-      <div className={styles.treeContent}>
+      <div className={styles.treeContent} role="tree" aria-label="File Explorer">
         {shouldShowCreateInputAt(null) && <AddItemInput />}
 
         {tree.map((rootNode) => (
