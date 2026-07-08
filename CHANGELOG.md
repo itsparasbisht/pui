@@ -1,5 +1,11 @@
 # @paras.in/pui
 
+## 0.2.0
+
+### Minor Changes
+
+- 48bc109: Added full WAI-ARIA compliant keyboard navigation support to the `FileExplorer` component. Users can now navigate the directory tree using Arrow keys, Home, End, Enter, Space, and the Asterisk (`\*`) key, as well as cycle focus using alphanumeric type-ahead character matching.
+
 ## 0.1.1
 
 ### Patch Changes
