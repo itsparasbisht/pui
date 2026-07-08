@@ -4,10 +4,14 @@ import type { FileExplorerItem, TreeNode } from "../utils";
 export type FileExplorerContext = {
   items: FileExplorerItem[];
   tree: TreeNode[];
+  visibleNodes: TreeNode[];
 
   selectedId: string | null;
   selectedItem: FileExplorerItem | null;
   handleSelectItem: (id: string | null) => void;
+
+  focusedId: string | null;
+  handleFocusItem: (id: string | null) => void;
 
   isExpanded: (id: string) => boolean;
   handleToggleExpand: (id: string) => void;
@@ -22,14 +26,19 @@ export type FileExplorerContext = {
   shouldShowCreateInputAt: (parentId: string | null) => boolean;
   handleDeleteItem: (id: string) => void;
   handleRenameItem: (id: string, name: string) => string | null;
+
+  handleKeyDown: (e: React.KeyboardEvent, node: TreeNode) => void;
 };
 
 const initialState: FileExplorerContext = {
   items: [],
   tree: [],
+  visibleNodes: [],
   selectedId: null,
   selectedItem: null,
   handleSelectItem: () => {},
+  focusedId: null,
+  handleFocusItem: () => {},
   isExpanded: () => false,
   handleToggleExpand: () => {},
   createDraft: null,
@@ -39,6 +48,7 @@ const initialState: FileExplorerContext = {
   shouldShowCreateInputAt: () => false,
   handleDeleteItem: () => {},
   handleRenameItem: () => null,
+  handleKeyDown: () => {},
 };
 
 export const FileExplorerContext =
