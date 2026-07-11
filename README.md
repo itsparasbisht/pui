@@ -2,7 +2,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/@paras.in/pui.svg?style=flat-square)](https://www.npmjs.com/package/@paras.in/pui)
 [![License](https://img.shields.io/npm/l/@paras.in/pui.svg?style=flat-square)](https://github.com/itsparasbisht/pui/blob/main/LICENSE)
-[![Storybook Demo](https://img.shields.io/badge/Storybook-Demo-FF4785?style=flat-square&logo=storybook)](https://6a46985e273c71987463da96-cmbnwonipd.chromatic.com/?path=/docs/components-button--docs)
+[![Storybook Demo](https://img.shields.io/badge/Storybook-Demo-FF4785?style=flat-square&logo=storybook)](https://main--6a46985e273c71987463da96.chromatic.com)
 
 A React and TypeScript component library focused on complex workspace UI components.
 
@@ -11,7 +11,7 @@ A React and TypeScript component library focused on complex workspace UI compone
 ## Live Documentation
 
 Explore the interactive component playground and API documentation:
-[Chromatic Storybook Demo](https://6a46985e273c71987463da96-cmbnwonipd.chromatic.com/?path=/docs/components-button--docs)
+[Chromatic Storybook Demo](https://main--6a46985e273c71987463da96.chromatic.com)
 
 ---
 
