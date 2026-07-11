@@ -1,6 +1,6 @@
 {
   "name": "@paras.in/pui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A React and TypeScript component library focused on complex workspace UI components.",
   "author": "Paras Bisht",
   "license": "MIT",
