@@ -1,6 +1,6 @@
 import { FileExplorerProvider } from "../context/FileExplorerProvider";
 import { FileExplorerTree } from "./FileExplorerTree";
-import type { FileExplorerItem } from "../utils";
+import type { FileExplorerItem, FileExplorerIcons } from "../utils";
 
 export type FileExplorerProps = {
   items: FileExplorerItem[];
@@ -12,6 +12,7 @@ export type FileExplorerProps = {
 
   className?: string;
   theme?: "light" | "dark";
+  icons?: FileExplorerIcons;
 };
 
 export function FileExplorer({
@@ -22,6 +23,7 @@ export function FileExplorer({
   onExpandedChange,
   className,
   theme = "dark",
+  icons,
 }: FileExplorerProps) {
   return (
     <>
@@ -31,6 +33,7 @@ export function FileExplorer({
         onSelectionChange={onSelectionChange}
         expandedIds={expandedIds}
         onExpandedChange={onExpandedChange}
+        icons={icons}
       >
         <FileExplorerTree className={className} theme={theme} />
       </FileExplorerProvider>

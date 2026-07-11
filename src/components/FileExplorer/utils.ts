@@ -1,3 +1,6 @@
+import React, { type ReactNode } from "react";
+import { Folder, FolderOpen, File } from "lucide-react";
+
 export type ItemType = "folder" | "file";
 
 export type FileExplorerItem = {
@@ -6,6 +9,54 @@ export type FileExplorerItem = {
   type: "folder" | "file";
   parentId: string | null;
 };
+
+export type FileExplorerIcons = {
+  file?: ReactNode;
+  folderClosed?: ReactNode;
+  folderOpen?: ReactNode;
+  nameMap?: Record<string, ReactNode>;
+  extensionMap?: Record<string, ReactNode>;
+};
+
+export function getFileExtension(name: string): string {
+  const dotIndex = name.lastIndexOf(".");
+  if (dotIndex <= 0) return "";
+  return name.slice(dotIndex + 1).toLowerCase();
+}
+
+export function resolveIcon({
+  name,
+  type,
+  isExpanded = false,
+  icons,
+}: {
+  name: string;
+  type: "folder" | "file";
+  isExpanded?: boolean;
+  icons?: FileExplorerIcons;
+}): ReactNode {
+  const isFolder = type === "folder";
+  const normalizedName = name.trim();
+
+  if (isFolder) {
+    if (normalizedName && icons?.nameMap && normalizedName in icons.nameMap) {
+      return icons.nameMap[normalizedName];
+    }
+    if (isExpanded) {
+      return icons?.folderOpen ?? React.createElement(FolderOpen, { size: 16 });
+    }
+    return icons?.folderClosed ?? React.createElement(Folder, { size: 16 });
+  } else {
+    if (normalizedName && icons?.nameMap && normalizedName in icons.nameMap) {
+      return icons.nameMap[normalizedName];
+    }
+    const ext = getFileExtension(normalizedName);
+    if (ext && icons?.extensionMap && ext in icons.extensionMap) {
+      return icons.extensionMap[ext];
+    }
+    return icons?.file ?? React.createElement(File, { size: 16 });
+  }
+}
 
 export type CreateItemNameValidationParams = {
   name: string;

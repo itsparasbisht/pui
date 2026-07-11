@@ -316,5 +316,62 @@ describe("FileExplorer Component", () => {
     await user.keyboard("p");
     expect(document.activeElement).toBe(packageItem);
   });
+
+  describe("Custom Icons", () => {
+    it("should render custom icons based on filename, extension, and default type", () => {
+      const items: FileExplorerItem[] = [
+        { id: "1", name: "src", type: "folder", parentId: null },
+        { id: "2", name: "package.json", type: "file", parentId: null },
+        { id: "3", name: "main.ts", type: "file", parentId: null },
+        { id: "4", name: "readme.md", type: "file", parentId: null },
+      ];
+
+      const customIcons = {
+        file: <span data-testid="default-file-icon">DefaultFile</span>,
+        folderClosed: <span data-testid="folder-closed-icon">FolderClosed</span>,
+        folderOpen: <span data-testid="folder-open-icon">FolderOpen</span>,
+        nameMap: {
+          "package.json": <span data-testid="package-json-icon">PackageJson</span>,
+        },
+        extensionMap: {
+          ts: <span data-testid="ts-icon">TypeScript</span>,
+        },
+      };
+
+      const { rerender } = render(
+        <FileExplorer
+          items={items}
+          onItemsChange={() => {}}
+          expandedIds={[]}
+          onExpandedChange={() => {}}
+          icons={customIcons}
+        />
+      );
+
+      // Check package.json nameMap match
+      expect(screen.getByTestId("package-json-icon")).toBeInTheDocument();
+
+      // Check main.ts extensionMap match
+      expect(screen.getByTestId("ts-icon")).toBeInTheDocument();
+
+      // Check readme.md default file fallback match
+      expect(screen.getByTestId("default-file-icon")).toBeInTheDocument();
+
+      // Check folderClosed match
+      expect(screen.getByTestId("folder-closed-icon")).toBeInTheDocument();
+
+      // Expand "src" and check folderOpen match
+      rerender(
+        <FileExplorer
+          items={items}
+          onItemsChange={() => {}}
+          expandedIds={["1"]}
+          onExpandedChange={() => {}}
+          icons={customIcons}
+        />
+      );
+      expect(screen.getByTestId("folder-open-icon")).toBeInTheDocument();
+    });
+  });
 });
 

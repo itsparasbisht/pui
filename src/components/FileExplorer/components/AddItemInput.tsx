@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import { FileExplorerContext } from "../context/FileExplorerContext";
-import { Folder, File } from "lucide-react";
+import { resolveIcon } from "../utils";
 import styles from "./AddItemInput.module.css";
 
 export function AddItemInput() {
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const { handleCreateItem, handleCancelCreate, createDraft } =
+  const { handleCreateItem, handleCancelCreate, createDraft, icons } =
     useContext(FileExplorerContext);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -32,11 +32,18 @@ export function AddItemInput() {
     <div className={styles.container} onClick={(e) => e.stopPropagation()}>
       <div className={styles.inputWrapper}>
         <div className={styles.spacer} />
-        {createDraft?.type === "folder" ? (
-          <Folder size={16} className={styles.icon} />
-        ) : (
-          <File size={16} className={styles.icon} />
-        )}
+        <span
+          className={`${styles.iconWrapper} pui-item-icon ${
+            createDraft?.type === "folder" ? "pui-folder-icon" : "pui-file-icon"
+          }`}
+        >
+          {resolveIcon({
+            name: inputValue,
+            type: createDraft?.type ?? "file",
+            isExpanded: false,
+            icons,
+          })}
+        </span>
         <div className={styles.inputContainer}>
           <input
             type="text"

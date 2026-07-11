@@ -1,5 +1,5 @@
-import { File, Folder, MoreVertical, ChevronRight, FolderOpen } from "lucide-react";
-import { type TreeNode } from "../utils";
+import { MoreVertical, ChevronRight } from "lucide-react";
+import { type TreeNode, resolveIcon } from "../utils";
 import styles from "./ItemNode.module.css";
 import { useContext, useState, useRef, useEffect } from "react";
 import { FileExplorerContext } from "../context/FileExplorerContext";
@@ -25,6 +25,7 @@ export function ItemNode({ node }: ItemNodeProps) {
     handleFocusItem,
     visibleNodes,
     handleKeyDown,
+    icons,
   } = useContext(FileExplorerContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,6 +58,23 @@ export function ItemNode({ node }: ItemNodeProps) {
 
   const isSelected = selectedId === node.id;
   const isFolder = node.type === "folder";
+
+  const nodeIcon = (
+    <span
+      className={`${styles.iconWrapper} pui-item-icon ${
+        isFolder
+          ? `${styles.folderIcon} pui-folder-icon`
+          : `${styles.fileIcon} pui-file-icon`
+      }`}
+    >
+      {resolveIcon({
+        name: node.name,
+        type: node.type,
+        isExpanded: isExpanded(node.id),
+        icons,
+      })}
+    </span>
+  );
 
   const isFirstVisibleNode = visibleNodes.length > 0 && visibleNodes[0].id === node.id;
   const isTabFocusable =
@@ -141,7 +159,7 @@ export function ItemNode({ node }: ItemNodeProps) {
                 >
                   <div className={styles.renameRow}>
                     <ChevronRight className={`${styles.chevron} ${isExpanded(node.id) ? styles.chevronExpanded : ""}`} size={14} />
-                    {isExpanded(node.id) ? <FolderOpen size={16} /> : <Folder size={16} />}
+                    {nodeIcon}
                     <input
                       type="text"
                       value={renameValue}
@@ -160,9 +178,9 @@ export function ItemNode({ node }: ItemNodeProps) {
                 </div>
               ) : (
                 <>
-                  <div className={styles.itemContent}>
+                  <div className={styles.itemContent} title={node.name}>
                     <ChevronRight className={`${styles.chevron} ${isExpanded(node.id) ? styles.chevronExpanded : ""}`} size={14} />
-                    {isExpanded(node.id) ? <FolderOpen size={16} /> : <Folder size={16} />}
+                    {nodeIcon}
                     <span className={styles.itemName}>{node.name}</span>
                   </div>
                   <div className={styles.menuContainer} ref={menuRef}>
@@ -272,7 +290,7 @@ export function ItemNode({ node }: ItemNodeProps) {
               >
                 <div className={styles.renameRow}>
                   <div className={styles.spacer} />
-                  <File size={16} />
+                  {nodeIcon}
                   <input
                     type="text"
                     value={renameValue}
@@ -291,9 +309,9 @@ export function ItemNode({ node }: ItemNodeProps) {
               </div>
             ) : (
               <>
-                <div className={styles.itemContent}>
+                <div className={styles.itemContent} title={node.name}>
                   <div className={styles.spacer} />
-                  <File size={16} /> <span className={styles.itemName}>{node.name}</span>
+                  {nodeIcon} <span className={styles.itemName}>{node.name}</span>
                 </div>
                 <div className={styles.menuContainer} ref={menuRef}>
                   <button
