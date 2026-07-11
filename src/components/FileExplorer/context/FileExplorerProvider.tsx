@@ -19,6 +19,7 @@ export function FileExplorerProvider({
   onSelectionChange,
   expandedIds,
   onExpandedChange,
+  icons,
 }: FileExplorerProviderProps) {
   const tree = useMemo(() => buildTree(items), [items]);
 
@@ -315,6 +316,7 @@ export function FileExplorerProvider({
         items,
         tree,
         visibleNodes,
+        icons,
         selectedId,
         selectedItem,
         handleSelectItem,

@@ -21,6 +21,7 @@ const meta = {
 - **Validation:** Built-in naming validation (prevents duplicates in the same directory, invalid characters, trailing dots/spaces).
 - **Themes:** Supports \`light\` and \`dark\` modes natively.
 - **Context Actions:** Built-in context menu for nested operations (Add file/folder inside, rename, delete).
+- **Custom Icons Mapping:** Override default folder/file icons, target specific file extensions (e.g. \`.ts\`, \`.css\`), or map exact filenames (e.g. \`package.json\`). Custom icons automatically scale and align correctly, maintaining explorer indentation.
         `,
       },
     },
@@ -57,6 +58,13 @@ const meta = {
     className: {
       control: "text",
       description: "Custom CSS class applied to the root container",
+    },
+    icons: {
+      control: "object",
+      description: "Custom file and folder icons configuration (mappings for extensions, names, and defaults)",
+      table: {
+        type: { summary: "FileExplorerIcons" },
+      },
     },
   },
   args: {
@@ -408,6 +416,74 @@ export const CustomStyling: Story = {
           onExpandedChange={setExpandedIds}
           className="custom-explorer-sidebar"
           theme="dark"
+        />
+      </div>
+    );
+  },
+};
+
+export const CustomIcons: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: `
+Demonstrates overriding file and folder icons. You can pass a configuration object containing:
+- \`file\`, \`folderClosed\`, and \`folderOpen\` (for default styles).
+- \`nameMap\` (for matching specific items like \`package.json\` or \`node_modules\`).
+- \`extensionMap\` (for extension-based styling like \`ts\`, \`tsx\`, or \`css\`).
+
+All custom elements are automatically constrained to standard sizing inside the item wrapper, ensuring a clean, aligned, and professional visual tree.
+        `,
+      },
+    },
+  },
+  render: () => {
+    const [items, setItems] = useState<FileExplorerItem[]>(standardItems);
+    const [expandedIds, setExpandedIds] = useState<string[]>(["1", "2"]);
+
+    // Simple custom dots/symbols for clean visualization
+    const iconsConfig = {
+      file: (
+        <span style={{ fontSize: "12px", color: "#a6adc8" }}>📄</span>
+      ),
+      folderClosed: (
+        <span style={{ fontSize: "12px", color: "#f9e2af" }}>📁</span>
+      ),
+      folderOpen: (
+        <span style={{ fontSize: "12px", color: "#f9e2af" }}>📂</span>
+      ),
+      nameMap: {
+        "package.json": (
+          <span style={{ fontSize: "12px", color: "#f38ba8" }}>📦</span>
+        ),
+        "node_modules": (
+          <span style={{ fontSize: "12px", color: "#a6e3a1" }}>⚙️</span>
+        ),
+      },
+      extensionMap: {
+        ts: (
+          <span style={{ fontSize: "10px", color: "#89b4fa" }}>🟦</span>
+        ),
+        tsx: (
+          <span style={{ fontSize: "10px", color: "#74c7ec" }}>⚛️</span>
+        ),
+        css: (
+          <span style={{ fontSize: "12px", color: "#cba6f7" }}>🎨</span>
+        ),
+      },
+    };
+
+    return (
+      <div
+        style={{ padding: "20px" }}
+      >
+        <FileExplorer
+          items={items}
+          onItemsChange={setItems}
+          expandedIds={expandedIds}
+          onExpandedChange={setExpandedIds}
+          theme="dark"
+          icons={iconsConfig}
         />
       </div>
     );

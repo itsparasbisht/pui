@@ -1,10 +1,11 @@
 import { createContext } from "react";
-import type { FileExplorerItem, TreeNode } from "../utils";
+import type { FileExplorerItem, TreeNode, FileExplorerIcons } from "../utils";
 
 export type FileExplorerContext = {
   items: FileExplorerItem[];
   tree: TreeNode[];
   visibleNodes: TreeNode[];
+  icons?: FileExplorerIcons;
 
   selectedId: string | null;
   selectedItem: FileExplorerItem | null;
@@ -34,6 +35,7 @@ const initialState: FileExplorerContext = {
   items: [],
   tree: [],
   visibleNodes: [],
+  icons: undefined,
   selectedId: null,
   selectedItem: null,
   handleSelectItem: () => {},
