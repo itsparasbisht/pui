@@ -373,5 +373,33 @@ describe("FileExplorer Component", () => {
       expect(screen.getByTestId("folder-open-icon")).toBeInTheDocument();
     });
   });
+
+  describe("Read-Only Mode", () => {
+    const readOnlyItems: FileExplorerItem[] = [
+      { id: "1", name: "src", type: "folder", parentId: null },
+      { id: "2", name: "package.json", type: "file", parentId: null },
+    ];
+
+    it("does not render the creation toolbar (new file/folder buttons)", () => {
+      render(<FileExplorer items={readOnlyItems} readOnly={true} />);
+
+      expect(screen.queryByLabelText("New file")).not.toBeInTheDocument();
+      expect(screen.queryByLabelText("New folder")).not.toBeInTheDocument();
+    });
+
+    it("renders the custom empty state subtext message when the tree is empty", () => {
+      render(<FileExplorer items={[]} readOnly={true} />);
+
+      expect(screen.getByText("Empty Workspace")).toBeInTheDocument();
+      expect(screen.getByText("No files or folders in this workspace")).toBeInTheDocument();
+      expect(screen.queryByText("Create a file or folder from the toolbar above")).not.toBeInTheDocument();
+    });
+
+    it("does not render the 'More options' context menu button on items", () => {
+      render(<FileExplorer items={readOnlyItems} readOnly={true} />);
+
+      expect(screen.queryByLabelText("More options")).not.toBeInTheDocument();
+    });
+  });
 });
 

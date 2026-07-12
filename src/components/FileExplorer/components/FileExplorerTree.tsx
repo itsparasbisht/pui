@@ -16,6 +16,7 @@ export function FileExplorerTree({ className, theme }: FileExplorerTreeProps) {
     handleStartCreate,
     handleCancelCreate,
     shouldShowCreateInputAt,
+    readOnly,
   } = useContext(FileExplorerContext);
 
   return (
@@ -28,28 +29,32 @@ export function FileExplorerTree({ className, theme }: FileExplorerTreeProps) {
       }}
     >
       <div className={styles.header}>
-        <button
-          type="button"
-          className={styles.headerButton}
-          aria-label="New folder"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleStartCreate("folder");
-          }}
-        >
-          <FolderPlus size={16} />
-        </button>
-        <button
-          type="button"
-          className={styles.headerButton}
-          aria-label="New file"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleStartCreate("file");
-          }}
-        >
-          <FilePlus size={16} />
-        </button>
+        {!readOnly && (
+          <>
+            <button
+              type="button"
+              className={styles.headerButton}
+              aria-label="New folder"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleStartCreate("folder");
+              }}
+            >
+              <FolderPlus size={16} />
+            </button>
+            <button
+              type="button"
+              className={styles.headerButton}
+              aria-label="New file"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleStartCreate("file");
+              }}
+            >
+              <FilePlus size={16} />
+            </button>
+          </>
+        )}
       </div>
 
       <div className={styles.treeContent} role="tree" aria-label="File Explorer">
@@ -63,7 +68,11 @@ export function FileExplorerTree({ className, theme }: FileExplorerTreeProps) {
           <div className={styles.emptyState}>
             <FolderPlus size={24} strokeWidth={1.5} className={styles.emptyIcon} />
             <p className={styles.emptyText}>Empty Workspace</p>
-            <p className={styles.emptySubtext}>Create a file or folder from the toolbar above</p>
+            <p className={styles.emptySubtext}>
+              {readOnly
+                ? "No files or folders in this workspace"
+                : "Create a file or folder from the toolbar above"}
+            </p>
           </div>
         )}
       </div>

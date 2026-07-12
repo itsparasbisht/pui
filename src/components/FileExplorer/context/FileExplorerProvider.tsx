@@ -5,12 +5,16 @@ import {
   validateCreateItemName,
   createUniqueItemId,
   type TreeNode,
+  type FileExplorerItem,
 } from "../utils";
-import type { FileExplorerProps } from "../components/FileExplorer";
+import type { BaseFileExplorerProps } from "../components/FileExplorer";
 
 type FileExplorerProviderProps = {
   children: ReactNode;
-} & Omit<FileExplorerProps, "className">;
+} & Omit<BaseFileExplorerProps, "className"> & {
+  onItemsChange: (items: FileExplorerItem[]) => void;
+  readOnly?: boolean;
+};
 
 export function FileExplorerProvider({
   children,
@@ -20,6 +24,7 @@ export function FileExplorerProvider({
   expandedIds,
   onExpandedChange,
   icons,
+  readOnly = false,
 }: FileExplorerProviderProps) {
   const tree = useMemo(() => buildTree(items), [items]);
 
@@ -208,6 +213,7 @@ export function FileExplorerProvider({
     type: "file" | "folder",
     targetParentId?: string | null,
   ) {
+    if (readOnly) return;
     let draftParentId: string | null;
 
     if (targetParentId !== undefined) {
@@ -231,6 +237,7 @@ export function FileExplorerProvider({
   }
 
   function handleCreateItem(name: string) {
+    if (readOnly) return null;
     const trimmedName = name.trim();
 
     if (!createDraft) return null;
@@ -265,6 +272,7 @@ export function FileExplorerProvider({
   }
 
   function handleDeleteItem(id: string) {
+    if (readOnly) return;
     const idsToDelete = new Set<string>([id]);
     let addedNew = true;
     while (addedNew) {
@@ -286,6 +294,7 @@ export function FileExplorerProvider({
   }
 
   function handleRenameItem(id: string, name: string): string | null {
+    if (readOnly) return null;
     const trimmedName = name.trim();
     const itemToRename = items.find((item) => item.id === id);
     if (!itemToRename) return "Item not found";
@@ -317,6 +326,7 @@ export function FileExplorerProvider({
         tree,
         visibleNodes,
         icons,
+        readOnly,
         selectedId,
         selectedItem,
         handleSelectItem,

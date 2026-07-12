@@ -19,6 +19,7 @@ details > summary {
     color: var(--pui-color-text);
     transition: background-color var(--pui-t-fast) var(--pui-ease);
     user-select: none;
+    min-height: 30px;
 }
 
 .item:hover {
