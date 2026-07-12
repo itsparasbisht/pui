@@ -26,6 +26,7 @@ export function ItemNode({ node }: ItemNodeProps) {
     visibleNodes,
     handleKeyDown,
     icons,
+    readOnly,
   } = useContext(FileExplorerContext);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -183,69 +184,71 @@ export function ItemNode({ node }: ItemNodeProps) {
                     {nodeIcon}
                     <span className={styles.itemName}>{node.name}</span>
                   </div>
-                  <div className={styles.menuContainer} ref={menuRef}>
-                    <button
-                      type="button"
-                      className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        setIsMenuOpen((prev) => !prev);
-                      }}
-                      aria-label="More options"
-                    >
-                      <MoreVertical size={16} />
-                    </button>
-                    {isMenuOpen && (
-                      <div className={styles.dropdownMenu}>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            handleStartCreate("file", node.id);
-                            setIsMenuOpen(false);
-                          }}
-                        >
-                          Add File
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            handleStartCreate("folder", node.id);
-                            setIsMenuOpen(false);
-                          }}
-                        >
-                          Add Folder
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            setRenameValue(node.name);
-                            setIsRenaming(true);
-                            setIsMenuOpen(false);
-                          }}
-                        >
-                          Rename
-                        </button>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            handleDeleteItem(node.id);
-                            setIsMenuOpen(false);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                  {!readOnly && (
+                    <div className={styles.menuContainer} ref={menuRef}>
+                      <button
+                        type="button"
+                        className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setIsMenuOpen((prev) => !prev);
+                        }}
+                        aria-label="More options"
+                      >
+                        <MoreVertical size={16} />
+                      </button>
+                      {isMenuOpen && (
+                        <div className={styles.dropdownMenu}>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleStartCreate("file", node.id);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Add File
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleStartCreate("folder", node.id);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Add Folder
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              setRenameValue(node.name);
+                              setIsRenaming(true);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Rename
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handleDeleteItem(node.id);
+                              setIsMenuOpen(false);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </>
               )}
             </summary>
@@ -313,47 +316,49 @@ export function ItemNode({ node }: ItemNodeProps) {
                   <div className={styles.spacer} />
                   {nodeIcon} <span className={styles.itemName}>{node.name}</span>
                 </div>
-                <div className={styles.menuContainer} ref={menuRef}>
-                  <button
-                    type="button"
-                    className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      setIsMenuOpen((prev) => !prev);
-                    }}
-                    aria-label="More options"
-                  >
-                    <MoreVertical size={16} />
-                  </button>
-                  {isMenuOpen && (
-                    <div className={styles.dropdownMenu}>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          setRenameValue(node.name);
-                          setIsRenaming(true);
-                          setIsMenuOpen(false);
-                        }}
-                      >
-                        Rename
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          handleDeleteItem(node.id);
-                          setIsMenuOpen(false);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </div>
+                {!readOnly && (
+                  <div className={styles.menuContainer} ref={menuRef}>
+                    <button
+                      type="button"
+                      className={`${styles.menuButton} ${isMenuOpen ? styles.menuButtonOpen : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setIsMenuOpen((prev) => !prev);
+                      }}
+                      aria-label="More options"
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {isMenuOpen && (
+                      <div className={styles.dropdownMenu}>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setRenameValue(node.name);
+                            setIsRenaming(true);
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Rename
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            handleDeleteItem(node.id);
+                            setIsMenuOpen(false);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </>
             )}
           </div>

@@ -22,6 +22,7 @@ const meta = {
 - **Themes:** Supports \`light\` and \`dark\` modes natively.
 - **Context Actions:** Built-in context menu for nested operations (Add file/folder inside, rename, delete).
 - **Custom Icons Mapping:** Override default folder/file icons, target specific file extensions (e.g. \`.ts\`, \`.css\`), or map exact filenames (e.g. \`package.json\`). Custom icons automatically scale and align correctly, maintaining explorer indentation.
+- **Read-Only Mode:** Pass the \`readOnly\` prop to disable all file creation, deletion, and renaming controls, cleanly hiding toolbar buttons and context menus while preserving pixel-perfect alignment. Under the hood, TypeScript union types relax the requirement for \`onItemsChange\`, making it optional.
         `,
       },
     },
@@ -92,7 +93,7 @@ export const Default: Story = {
 
     return (
       <div
-        style={{ padding: "20px", height: "500px" }}
+        style={{ padding: "20px", height: "480px" }}
       >
         <FileExplorer
           items={items}
@@ -121,7 +122,7 @@ export const EmptyState: Story = {
 
     return (
       <div
-        style={{ padding: "20px", height: "400px" }}
+        style={{ padding: "20px", height: "480px" }}
       >
         <FileExplorer
           items={items}
@@ -156,44 +157,48 @@ export const Themes: Story = {
           padding: "20px",
           background: "var(--pui-color-surface)",
           borderRadius: "8px",
-          height: "500px",
+          height: "480px",
         }}
       >
-        <div>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <h4
             style={{
               color: "var(--pui-color-text)",
-              marginBottom: "12px",
+              margin: "0 0 12px 0",
               textAlign: "center",
             }}
           >
             Light Theme
           </h4>
-          <FileExplorer
-            items={items}
-            onItemsChange={setItems}
-            expandedIds={expandedIds}
-            onExpandedChange={setExpandedIds}
-            theme="light"
-          />
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <FileExplorer
+              items={items}
+              onItemsChange={setItems}
+              expandedIds={expandedIds}
+              onExpandedChange={setExpandedIds}
+              theme="light"
+            />
+          </div>
         </div>
-        <div>
+        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
           <h4
             style={{
               color: "var(--pui-color-text)",
-              marginBottom: "12px",
+              margin: "0 0 12px 0",
               textAlign: "center",
             }}
           >
             Dark Theme
           </h4>
-          <FileExplorer
-            items={items}
-            onItemsChange={setItems}
-            expandedIds={expandedIds}
-            onExpandedChange={setExpandedIds}
-            theme="dark"
-          />
+          <div style={{ flex: 1, minHeight: 0 }}>
+            <FileExplorer
+              items={items}
+              onItemsChange={setItems}
+              expandedIds={expandedIds}
+              onExpandedChange={setExpandedIds}
+              theme="dark"
+            />
+          </div>
         </div>
       </div>
     );
@@ -221,7 +226,7 @@ export const DeepNesting: Story = {
 
     return (
       <div
-        style={{ padding: "20px", height: "500px" }}
+        style={{ padding: "20px", height: "480px" }}
       >
         <FileExplorer
           items={items}
@@ -250,7 +255,7 @@ export const LongNames: Story = {
 
     return (
       <div
-        style={{ padding: "20px", height: "500px" }}
+        style={{ padding: "20px", height: "480px" }}
       >
         <FileExplorer
           items={items}
@@ -282,7 +287,7 @@ const ControlledExpansionDemo = () => {
         maxWidth: "600px",
       }}
     >
-      <div style={{ flex: 1, height: "500px" }}>
+      <div style={{ flex: 1, height: "480px" }}>
         <FileExplorer
           items={items}
           onItemsChange={setItems}
@@ -402,7 +407,7 @@ export const CustomStyling: Story = {
         <style>{`
           div.custom-explorer-sidebar {
             width: 280px;
-            max-height: 500px;
+            max-height: 480px;
             border-radius: 12px;
             border: 2px solid var(--pui-color-primary);
             background: linear-gradient(135deg, #1e1e2e 0%, #11111b 100%);
@@ -484,6 +489,34 @@ All custom elements are automatically constrained to standard sizing inside the 
           onExpandedChange={setExpandedIds}
           theme="dark"
           icons={iconsConfig}
+        />
+      </div>
+    );
+  },
+};
+
+export const ReadOnly: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Demonstrates the File Explorer in Read-Only Mode. The creation toolbar is hidden, nested options menus are hidden, and all mutating actions are disabled. In read-only mode, `onItemsChange` is completely optional.",
+      },
+    },
+  },
+  render: () => {
+    const [expandedIds, setExpandedIds] = useState<string[]>(["1", "2"]);
+
+    return (
+      <div
+        style={{ padding: "20px", height: "480px" }}
+      >
+        <FileExplorer
+          items={standardItems}
+          readOnly={true}
+          expandedIds={expandedIds}
+          onExpandedChange={setExpandedIds}
+          theme="dark"
         />
       </div>
     );

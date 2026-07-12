@@ -6,6 +6,7 @@ export type FileExplorerContext = {
   tree: TreeNode[];
   visibleNodes: TreeNode[];
   icons?: FileExplorerIcons;
+  readOnly: boolean;
 
   selectedId: string | null;
   selectedItem: FileExplorerItem | null;
@@ -36,6 +37,7 @@ const initialState: FileExplorerContext = {
   tree: [],
   visibleNodes: [],
   icons: undefined,
+  readOnly: false,
   selectedId: null,
   selectedItem: null,
   handleSelectItem: () => {},

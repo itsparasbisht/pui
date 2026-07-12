@@ -2,9 +2,8 @@ import { FileExplorerProvider } from "../context/FileExplorerProvider";
 import { FileExplorerTree } from "./FileExplorerTree";
 import type { FileExplorerItem, FileExplorerIcons } from "../utils";
 
-export type FileExplorerProps = {
+export type BaseFileExplorerProps = {
   items: FileExplorerItem[];
-  onItemsChange: (items: FileExplorerItem[]) => void;
   onSelectionChange?: (item: FileExplorerItem | null) => void;
 
   expandedIds?: string[];
@@ -15,6 +14,18 @@ export type FileExplorerProps = {
   icons?: FileExplorerIcons;
 };
 
+export type ReadWriteFileExplorerProps = BaseFileExplorerProps & {
+  readOnly?: false;
+  onItemsChange: (items: FileExplorerItem[]) => void;
+};
+
+export type ReadOnlyFileExplorerProps = BaseFileExplorerProps & {
+  readOnly: true;
+  onItemsChange?: (items: FileExplorerItem[]) => void;
+};
+
+export type FileExplorerProps = ReadWriteFileExplorerProps | ReadOnlyFileExplorerProps;
+
 export function FileExplorer({
   items,
   onItemsChange,
@@ -24,16 +35,18 @@ export function FileExplorer({
   className,
   theme = "dark",
   icons,
+  readOnly = false,
 }: FileExplorerProps) {
   return (
     <>
       <FileExplorerProvider
         items={items}
-        onItemsChange={onItemsChange}
+        onItemsChange={onItemsChange ?? (() => {})}
         onSelectionChange={onSelectionChange}
         expandedIds={expandedIds}
         onExpandedChange={onExpandedChange}
         icons={icons}
+        readOnly={readOnly}
       >
         <FileExplorerTree className={className} theme={theme} />
       </FileExplorerProvider>
