@@ -1,5 +1,11 @@
 # @paras.in/pui
 
+## 0.4.0
+
+### Minor Changes
+
+- 08fad56: Added a `readOnly` mode to the `FileExplorer` component which hides the creation toolbar and context menus, makes `onItemsChange` optional, and preserves consistent layout spacing. Centralized public API type exports and optimized the CI workflow triggers.
+
 ## 0.3.0
 
 ### Minor Changes
